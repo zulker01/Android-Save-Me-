@@ -1,0 +1,93 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+    <TextView
+        android:id="@+id/Number1tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact 1"
+        android:textSize="30sp"
+        android:textColor="@android:color/black"
+        />
+
+    <Button
+        android:id="@+id/submit1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Number1tv"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="true"
+        android:text="SubMit" />
+
+    <EditText
+        android:id="@+id/editumber1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/submit1"
+        android:layout_toLeftOf="@+id/submit1"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
+    <TextView
+        android:id="@+id/Number2tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact 2"
+        android:layout_below="@id/editumber1"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        />
+
+    <Button
+        android:id="@+id/submit2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Number2tv"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="true"
+        android:text="SubMit" />
+
+    <EditText
+        android:id="@+id/editnumber2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/submit2"
+        android:layout_toLeftOf="@+id/submit2"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
+    <TextView
+        android:id="@+id/Number3tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact 3"
+        android:layout_below="@id/editnumber2"
+        android:textSize="30sp"
+        android:textColor="@android:color/black"
+        />
+
+    <Button
+        android:id="@+id/submit3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Number3tv"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="true"
+        android:text="SubMit" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/submit3"
+        android:layout_toLeftOf="@+id/submit3"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+</RelativeLayout>
