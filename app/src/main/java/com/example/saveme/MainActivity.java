@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
                                               //intent.putExtra("pak",100);
 
                                               startActivity(intent);
+                                              finish();
                                           }
                                       }
         );

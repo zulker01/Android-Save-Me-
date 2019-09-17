@@ -18,7 +18,7 @@ public class menuPage extends AppCompatActivity {
         setContentView(R.layout.menu_page);
 
         Button addnum = (Button) findViewById(R.id.addNumber);
-
+        Button back = (Button) findViewById(R.id.menuBack);
 
 
         addnum.setOnClickListener(new View.OnClickListener()
@@ -31,6 +31,22 @@ public class menuPage extends AppCompatActivity {
                                               //intent.putExtra("pak",100);
 
                                               startActivity(intent);
+                                              finish();
+                                          }
+                                      }
+        );
+        back.setOnClickListener(new View.OnClickListener()
+                                      {
+                                          @Override
+                                          public void onClick(View view)
+                                          {
+
+
+                                              Intent intent = new Intent(menuPage.this, MainActivity.class);
+                                              //intent.putExtra("pak",100);
+
+                                              startActivity(intent);
+                                              finish();
                                           }
                                       }
         );
