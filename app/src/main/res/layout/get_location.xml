@@ -17,6 +17,7 @@
             android:textSize="25sp"
             android:text="You are at"
             android:layout_width="wrap_content"
+            android:textColor="@color/cardview_dark_background"
             android:layout_height="wrap_content" />
 
         <TextView
@@ -29,11 +30,22 @@
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/getCurrentLocation"
+            android:id="@+id/getLocation"
             android:layout_width="200sp"
             android:layout_height="50sp"
             android:layout_marginTop="40sp"
             android:layout_below="@id/txtCoordinates"
+            android:text="getLocation"
+            android:textSize="20sp"
+            android:background="@android:color/holo_blue_bright"
+
+            />
+        <Button
+            android:id="@+id/getCurrentLocationBack"
+            android:layout_width="200sp"
+            android:layout_height="50sp"
+            android:layout_marginTop="40sp"
+            android:layout_below="@id/getLocation"
             android:text="Back"
             android:textSize="20sp"
             android:background="@android:color/holo_blue_bright"
