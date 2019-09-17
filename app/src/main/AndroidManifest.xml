@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".AddNumber"></activity>
         <activity android:name=".menuPage" />
+        <activity android:name=".getLocationPage" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
