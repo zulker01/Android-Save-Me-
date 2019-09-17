@@ -40,12 +40,25 @@
             android:background="@android:color/holo_blue_bright"
 
             />
+
+        <Button
+            android:id="@+id/getLocationUpdates"
+            android:layout_width="200sp"
+            android:layout_height="50sp"
+            android:layout_marginTop="40sp"
+            android:layout_below="@id/getLocation"
+            android:text="get Location Updates"
+            android:textSize="20sp"
+            android:background="@android:color/holo_blue_bright"
+
+            />
+
         <Button
             android:id="@+id/getCurrentLocationBack"
             android:layout_width="200sp"
             android:layout_height="50sp"
             android:layout_marginTop="40sp"
-            android:layout_below="@id/getLocation"
+            android:layout_below="@id/getLocationUpdates"
             android:text="Back"
             android:textSize="20sp"
             android:background="@android:color/holo_blue_bright"
