@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".getLocationPage">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/txtLabel"
+            android:layout_marginTop="20sp"
+            android:textSize="25sp"
+            android:text="You are at"
+            android:layout_width="wrap_content"
+            android:textColor="@color/cardview_dark_background"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtCoordinates"
+            android:layout_marginTop="20sp"
+            android:textSize="25sp"
+            android:text=""
+            android:layout_below="@id/txtLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtAddress"
+            android:layout_marginTop="20sp"
+            android:textSize="25sp"
+            android:text=""
+            android:layout_below="@id/txtCoordinates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/getLocation"
+            android:layout_width="200sp"
+            android:layout_height="50sp"
+            android:layout_marginTop="40sp"
+            android:layout_below="@id/txtAddress"
+            android:text="getLocation"
+            android:textSize="20sp"
+            android:background="@android:color/holo_blue_bright"
+
+            />
+
+        <Button
+            android:id="@+id/getLocationUpdates"
+            android:layout_width="200sp"
+            android:layout_height="50sp"
+            android:layout_marginTop="40sp"
+            android:layout_below="@id/getLocation"
+            android:text="get Location Updates"
+            android:textSize="20sp"
+            android:background="@android:color/holo_blue_bright"
+
+            />
+
+        <Button
+            android:id="@+id/getCurrentLocationBack"
+            android:layout_width="200sp"
+            android:layout_height="50sp"
+            android:layout_marginTop="40sp"
+            android:layout_below="@id/getLocationUpdates"
+            android:text="Back"
+            android:textSize="20sp"
+            android:background="@android:color/holo_blue_bright"
+
+            />
+    </RelativeLayout>
+</RelativeLayout>

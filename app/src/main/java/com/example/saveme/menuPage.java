@@ -18,8 +18,8 @@ public class menuPage extends AppCompatActivity {
         setContentView(R.layout.menu_page);
 
         Button addnum = (Button) findViewById(R.id.addNumber);
-
-
+        Button back = (Button) findViewById(R.id.menuBack);
+        Button menuGetLocation = (Button) findViewById(R.id.menuGetLocation);
 
         addnum.setOnClickListener(new View.OnClickListener()
                                       {
@@ -31,8 +31,41 @@ public class menuPage extends AppCompatActivity {
                                               //intent.putExtra("pak",100);
 
                                               startActivity(intent);
+                                              finish();
                                           }
                                       }
+        );
+        back.setOnClickListener(new View.OnClickListener()
+                                      {
+                                          @Override
+                                          public void onClick(View view)
+                                          {
+
+
+                                              Intent intent = new Intent(menuPage.this, MainActivity.class);
+                                              //intent.putExtra("pak",100);
+
+                                              startActivity(intent);
+                                              finish();
+                                          }
+                                      }
+        );
+        menuGetLocation.setOnClickListener(new View.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(View view)
+                                    {
+
+                                        Toast menuToast = Toast.makeText(menuPage.this,"pak pak", Toast.LENGTH_LONG);
+                                        menuToast.show();
+
+                                        Intent intent = new Intent(menuPage.this, getLocationPage.class);
+                                        //intent.putExtra("pak",100);
+
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
         );
     }
 }
