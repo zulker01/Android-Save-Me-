@@ -7,8 +7,11 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +23,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import static java.lang.System.exit;
 
@@ -28,7 +36,7 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
 
     private static final int MY_PERMISSION_REQUEST_CODE = 7171;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 7172;
-    private TextView txtCoordinates;
+    private TextView txtCoordinates,txtAddress;
     private Button btnGetCoordinates, btnLocationUpdates;
     private boolean mRequestingLocationUpdates = false;
     private LocationRequest mLocationRequest;
@@ -62,6 +70,7 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
         btnGetCoordinates = (Button) findViewById(R.id.getLocation);
         btnLocationUpdates = (Button) findViewById(R.id.getLocationUpdates);
         Button back = (Button) findViewById(R.id.getCurrentLocationBack);
+        txtAddress = (TextView) findViewById(R.id.txtAddress);
         back.setOnClickListener(new View.OnClickListener()
                                 {
                                     @Override
@@ -154,12 +163,38 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
         if (mLastLocation != null) {
             double latitude = mLastLocation.getLatitude();
             double longitude = mLastLocation.getLongitude();
+
+            LatLng myCoordinates = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            String cityName = getCityName(myCoordinates);
+            txtAddress.setText(cityName);
             txtCoordinates.setText(latitude + " / " + longitude);
         } else
             txtCoordinates.setText("Couldn't get the location. Make sure location is enable on the device");
 
     }
 
+    private String getCityName(LatLng myCoordinates) {
+        String fullAddress= "";
+        Geocoder geocoder = new Geocoder(getLocationPage.this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(myCoordinates.latitude, myCoordinates.longitude, 1);
+            String address = addresses.get(0).getAddressLine(0);
+            String area = addresses.get(0).getLocality();
+
+            String city = addresses.get(0).getAdminArea();
+
+            String country = addresses.get(0).getCountryName();
+
+            String postalcode = addresses.get(0).getPostalCode();
+
+            fullAddress = address+", "+area+", "+city+", "+country+", "+postalcode;
+            Log.d("mylog", "Complete Address: " + addresses.toString());
+            Log.d("mylog", "Address: " + address);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fullAddress;
+    }
     private void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL);
