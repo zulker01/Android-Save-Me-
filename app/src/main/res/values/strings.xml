@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Save me !</string>
+
+    <string name="homeCallNowButton">Call NOow</string>
+    <string name="homeSendLocationButton">Send Location</string>
+    <string name="homeMenuButton">Menu</string>
+    <string name="homeQuitButton">Quit</string>
+    <string name="getLocationText">You are at</string>
+    <string name="getLocationButton">Get Location</string>
+    <string name="getLocationUpdateButton">Get updated location </string>
+    <string name="BackButton">Back</string>
+    <string name="AboutButton">About</string>
+    <string name="menuAddLocationButton">Add location </string>
+    <string name="menuAddNumberButton">Add Number</string>
+
+
+
 </resources>
