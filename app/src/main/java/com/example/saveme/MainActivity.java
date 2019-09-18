@@ -3,6 +3,7 @@ package com.example.saveme;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button menuButton = (Button) findViewById(R.id.homeMenuButton);
         Button quitButton = (Button) findViewById(R.id.homeQuitButton);
+        Button call=(Button) findViewById(R.id.homeCall);
 
 
         menuButton.setOnClickListener(new View.OnClickListener()
@@ -26,11 +28,9 @@ public class MainActivity extends AppCompatActivity {
                                           @Override
                                           public void onClick(View view)
                                           {
-                                              Toast menuToast = Toast.makeText(MainActivity.this,"pak pak", Toast.LENGTH_LONG);
-                                              menuToast.show();
+
 
                                               Intent intent = new Intent(MainActivity.this, menuPage.class);
-                                              //intent.putExtra("pak",100);
 
                                               startActivity(intent);
                                               finish();
@@ -42,9 +42,21 @@ public class MainActivity extends AppCompatActivity {
                                           @Override
                                           public void onClick(View view)
                                           {
-                                              Toast quitToast = Toast.makeText(MainActivity.this,"mara kha", Toast.LENGTH_LONG);
-                                              quitToast.show();
+
                                               exit(0);
+                                          }
+                                      }
+        );
+
+        call.setOnClickListener(new View.OnClickListener()
+                                      {
+                                          @Override
+                                          public void onClick(View view)
+                                          {
+                                              Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                              callIntent.setData(Uri.parse("tel:01785373724"));
+                                              startActivity(callIntent);
+
                                           }
                                       }
         );
