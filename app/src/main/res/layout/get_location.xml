@@ -15,7 +15,7 @@
             android:id="@+id/txtLabel"
             android:layout_marginTop="20sp"
             android:textSize="25sp"
-            android:text="You are at"
+            android:text="@string/getLocationText"
             android:layout_width="wrap_content"
             android:textColor="@color/cardview_dark_background"
             android:layout_height="wrap_content" />
@@ -44,7 +44,7 @@
             android:layout_height="50sp"
             android:layout_marginTop="40sp"
             android:layout_below="@id/txtAddress"
-            android:text="getLocation"
+            android:text="@string/getLocationButton"
             android:textSize="20sp"
             android:background="@android:color/holo_blue_bright"
 
@@ -56,7 +56,7 @@
             android:layout_height="50sp"
             android:layout_marginTop="40sp"
             android:layout_below="@id/getLocation"
-            android:text="get Location Updates"
+            android:text="@string/getLocationUpdateButton"
             android:textSize="20sp"
             android:background="@android:color/holo_blue_bright"
 
@@ -68,7 +68,7 @@
             android:layout_height="50sp"
             android:layout_marginTop="40sp"
             android:layout_below="@id/getLocationUpdates"
-            android:text="Back"
+            android:text="@string/BackButton"
             android:textSize="20sp"
             android:background="@android:color/holo_blue_bright"
 
