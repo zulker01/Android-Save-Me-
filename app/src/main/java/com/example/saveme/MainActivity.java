@@ -7,7 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.util.*;
+
+import org.w3c.dom.Text;
 
 import static java.lang.System.exit;
 
@@ -60,5 +64,16 @@ public class MainActivity extends AppCompatActivity {
                                           }
                                       }
         );
+
+
+        /*
+         The string pak is your location
+         String pak = getLocationPage.cityName;
+        TextView txt = (TextView) findViewById(R.id.test);
+        txt.setText(pak);
+
+        */
     }
+
+
 }

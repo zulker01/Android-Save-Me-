@@ -20,6 +20,7 @@
             android:layout_width="200sp"
             android:layout_height="50sp"
             android:layout_marginTop="0sp"
+            android:layout_below="@id/test"
             android:text="@string/homeCallNowButton"
             android:textSize="20sp"
             android:background="@android:color/holo_blue_bright"
