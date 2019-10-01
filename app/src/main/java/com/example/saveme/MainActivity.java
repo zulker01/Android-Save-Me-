@@ -1,4 +1,5 @@
-package com.example.saveme;
+
+        package com.example.saveme;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         Button menuButton = (Button) findViewById(R.id.homeMenuButton);
         Button quitButton = (Button) findViewById(R.id.homeQuitButton);
         Button call=(Button) findViewById(R.id.homeCall);
+        Button message=(Button) findViewById(R.id.homeSendLocation);
 
 
         menuButton.setOnClickListener(new View.OnClickListener()
@@ -49,16 +51,39 @@ public class MainActivity extends AppCompatActivity {
         );
 
         call.setOnClickListener(new View.OnClickListener()
-                                      {
-                                          @Override
-                                          public void onClick(View view)
-                                          {
-                                              Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                              callIntent.setData(Uri.parse("tel:01785373724"));
-                                              startActivity(callIntent);
+                                {
+                                    @Override
+                                    public void onClick(View view)
+                                    {
+                                        String number="01785373724";
+                                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                        callIntent.setData(Uri.parse("tel:"+number));
+                                        startActivity(callIntent);
 
-                                          }
-                                      }
+                                    }
+                                }
         );
+
+
+
+        message.setOnClickListener(new View.OnClickListener()
+                                   {
+                                       @Override
+                                       public void onClick(View view)
+                                       {
+                                           String number="01785373724";
+
+                                           Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
+                                                   Uri.parse("sms:"+number));
+                                           smsIntent.putExtra("sms_body", "Help Me, I am in Danger");
+                                           startActivity(smsIntent);
+
+                                       }
+                                   }
+        );
+
+
+
+
     }
 }
