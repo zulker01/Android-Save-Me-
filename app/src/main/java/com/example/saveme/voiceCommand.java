@@ -56,6 +56,13 @@ public class voiceCommand extends AppCompatActivity {
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     txvResult.setText(result.get(0));
+
+                    if(result.get(0).equals("call now"))
+                    {
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        callIntent.setData(Uri.parse("tel:01785373724"));
+                        startActivity(callIntent);
+                    }
                 }
                 break;
         }
