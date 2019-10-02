@@ -42,7 +42,7 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-
+    public static String cityName;
     private static int UPDATE_INTERVAL = 5000; // SEC
     private static int FATEST_INTERVAL = 3000; // SEC
     private static int DISPLACEMENT = 10; // METERS
@@ -165,7 +165,7 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
             double longitude = mLastLocation.getLongitude();
 
             LatLng myCoordinates = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            String cityName = getCityName(myCoordinates);
+            cityName = getCityName(myCoordinates);
             txtAddress.setText(cityName);
             txtCoordinates.setText(latitude + " / " + longitude);
         } else
