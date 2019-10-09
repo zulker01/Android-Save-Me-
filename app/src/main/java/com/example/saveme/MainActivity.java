@@ -69,12 +69,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
 
-<<<<<<< HEAD
-       // String pak =  getLocationPage.cityName;
-=======
 
-
->>>>>>> 403e60dfbf675222456f2c3fed94fff3c3e6682b
         message.setOnClickListener(new View.OnClickListener()
                                    {
                                        @Override
@@ -90,17 +85,8 @@ public class MainActivity extends AppCompatActivity {
                                        }
                                    }
         );
-/*
 
-
-*/
     }
 }
 
-/*
-         The string pak is your location
-         String pak = getLocationPage.cityName;
-        TextView txt = (TextView) findViewById(R.id.test);
-        txt.setText(pak);
 
-        */
