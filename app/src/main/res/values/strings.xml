@@ -14,6 +14,8 @@
     <string name="menuAddNumberButton">Add Number</string>
     <string name="menuVoiceCommandButton">Voice Command</string>
 
+    <string name="phonePermission">Phone permission Needed to auto call automatically</string>
+
 
 
 </resources>

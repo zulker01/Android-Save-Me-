@@ -1,6 +1,8 @@
 package com.example.saveme;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 
@@ -8,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 
 import android.net.Uri;
@@ -59,12 +62,26 @@ public class voiceCommand extends AppCompatActivity {
 
                     if(result.get(0).equals("call now"))
                     {
-                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                        callIntent.setData(Uri.parse("tel:01785373724"));
-                        startActivity(callIntent);
+                        callNow();
+
                     }
                 }
                 break;
         }
+    }
+
+    public void callNow()
+    {
+        String number="01785373724";
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:"+number));
+
+        if( ActivityCompat.checkSelfPermission(voiceCommand.this, Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED)
+        {
+            Toast menuToast = Toast.makeText(voiceCommand.this,R.string.phonePermission, Toast.LENGTH_LONG);
+            menuToast.show();
+            return ;
+        }
+        startActivity(callIntent);
     }
 }
