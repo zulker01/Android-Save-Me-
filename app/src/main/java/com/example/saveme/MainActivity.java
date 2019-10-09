@@ -70,33 +70,23 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
         message.setOnClickListener(new View.OnClickListener()
                                    {
                                        @Override
                                        public void onClick(View view)
                                        {
                                            String number="01785373724";
-
+                                           String pak =  getLocationPage.cityName;
                                            Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
                                                    Uri.parse("sms:"+number));
-                                           smsIntent.putExtra("sms_body", "Help Me, I am in Danger");
+                                           smsIntent.putExtra("sms_body", "Help Me, I am in Danger"+pak);
                                            startActivity(smsIntent);
 
                                        }
                                    }
         );
 
-
-
-
     }
 }
 
-/*
-         The string pak is your location
-         String pak = getLocationPage.cityName;
-        TextView txt = (TextView) findViewById(R.id.test);
-        txt.setText(pak);
 
-        */

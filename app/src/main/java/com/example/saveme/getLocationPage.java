@@ -39,10 +39,11 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
     private TextView txtCoordinates,txtAddress;
     private Button btnGetCoordinates, btnLocationUpdates;
     private boolean mRequestingLocationUpdates = false;
+    public  static  String cityName="";
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-    public static String cityName;
+   // public static String cityName;
     private static int UPDATE_INTERVAL = 5000; // SEC
     private static int FATEST_INTERVAL = 3000; // SEC
     private static int DISPLACEMENT = 10; // METERS
