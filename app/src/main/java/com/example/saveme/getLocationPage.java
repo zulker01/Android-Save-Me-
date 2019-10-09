@@ -39,6 +39,7 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
     private TextView txtCoordinates,txtAddress;
     private Button btnGetCoordinates, btnLocationUpdates;
     private boolean mRequestingLocationUpdates = false;
+    public  static  String cityName="";
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -165,7 +166,7 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
             double longitude = mLastLocation.getLongitude();
 
             LatLng myCoordinates = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            String cityName = getCityName(myCoordinates);
+            cityName = getCityName(myCoordinates);
             txtAddress.setText(cityName);
             txtCoordinates.setText(latitude + " / " + longitude);
         } else
