@@ -2,8 +2,11 @@
         package com.example.saveme;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -60,8 +63,15 @@ public class MainActivity extends AppCompatActivity {
                                     public void onClick(View view)
                                     {
                                         String number="01785373724";
-                                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                        Intent callIntent = new Intent(Intent.ACTION_CALL);
                                         callIntent.setData(Uri.parse("tel:"+number));
+
+                                        if( ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED)
+                                        {
+                                            Toast menuToast = Toast.makeText(MainActivity.this,R.string.phonePermission, Toast.LENGTH_LONG);
+                                            menuToast.show();
+                                            return ;
+                                        }
                                         startActivity(callIntent);
 
                                     }
