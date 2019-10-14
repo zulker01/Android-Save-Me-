@@ -23,7 +23,7 @@
         <TextView
             android:id="@+id/txtCoordinates"
             android:layout_marginTop="20sp"
-            android:textSize="25sp"
+            android:textSize="15sp"
             android:text=""
             android:layout_below="@id/txtLabel"
             android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
         <TextView
             android:id="@+id/txtAddress"
             android:layout_marginTop="20sp"
-            android:textSize="25sp"
+            android:textSize="10sp"
             android:text=""
             android:layout_below="@id/txtCoordinates"
             android:layout_width="wrap_content"

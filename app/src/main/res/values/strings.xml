@@ -16,6 +16,8 @@
 
     <string name="phonePermission">Phone permission Needed to auto call automatically</string>
 
+    <string name="messageBody">I am in danger, HELP ! I am at </string>
+
 
 
 </resources>
