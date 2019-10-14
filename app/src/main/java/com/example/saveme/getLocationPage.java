@@ -1,9 +1,5 @@
 package com.example.saveme;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +13,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -29,9 +29,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import static java.lang.System.exit;
-
-public class getLocationPage extends AppCompatActivity  implements GoogleApiClient.ConnectionCallbacks,
+public class getLocationPage extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final int MY_PERMISSION_REQUEST_CODE = 7171;
@@ -39,14 +37,11 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
     private TextView txtCoordinates,txtAddress;
     private Button btnGetCoordinates, btnLocationUpdates;
     private boolean mRequestingLocationUpdates = false;
+    public  static  String cityName="";
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-
-    public  static  String cityName="";
-    public static double latitude;
-    public static double longitude;
-
+   // public static String cityName;
     private static int UPDATE_INTERVAL = 5000; // SEC
     private static int FATEST_INTERVAL = 3000; // SEC
     private static int DISPLACEMENT = 10; // METERS
@@ -68,28 +63,28 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.get_location);
+       // setContentView(R.layout.get_location);
 
-        txtCoordinates = (TextView) findViewById(R.id.txtCoordinates);
-        btnGetCoordinates = (Button) findViewById(R.id.getLocation);
-        btnLocationUpdates = (Button) findViewById(R.id.getLocationUpdates);
-        Button back = (Button) findViewById(R.id.getCurrentLocationBack);
-        txtAddress = (TextView) findViewById(R.id.txtAddress);
-        back.setOnClickListener(new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View view)
-                                    {
+       // txtCoordinates = (TextView) findViewById(R.id.txtCoordinates);
+       // btnGetCoordinates = (Button) findViewById(R.id.getLocation);
+      //  btnLocationUpdates = (Button) findViewById(R.id.getLocationUpdates);
+      //  Button back = (Button) findViewById(R.id.getCurrentLocationBack);
+      //  txtAddress = (TextView) findViewById(R.id.txtAddress);
+      //  back.setOnClickListener(new View.OnClickListener()
+                            //    {
+                            //        @Override
+                            //        public void onClick(View view)
+                             //       {
 
 
-                                        Intent intent = new Intent(getLocationPage.this, menuPage.class);
+                              //          Intent intent = new Intent(getLocationPage.this, menuPage.class);
                                         //intent.putExtra("pak",100);
 
-                                        startActivity(intent);
+                                 //       startActivity(intent);
                                         finish();
-                                    }
-                                }
-        );
+                                //    }
+                             //   }
+     //   );
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -109,9 +104,6 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
             @Override
             public void onClick(View view) {
                 displayLocation();
-                txtAddress.setText(cityName);
-
-                txtCoordinates.setText(latitude + " / " + longitude);
             }
         });
 
@@ -161,19 +153,20 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
     }
 
 
-    public void displayLocation() {
+    private void displayLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
-             latitude = mLastLocation.getLatitude();
-             longitude = mLastLocation.getLongitude();
+            double latitude = mLastLocation.getLatitude();
+            double longitude = mLastLocation.getLongitude();
 
             LatLng myCoordinates = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             cityName = getCityName(myCoordinates);
-
+            txtAddress.setText(cityName);
+            txtCoordinates.setText(latitude + " / " + longitude);
         } else
             txtCoordinates.setText("Couldn't get the location. Make sure location is enable on the device");
 
@@ -251,9 +244,6 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         displayLocation();
-        txtAddress.setText(cityName);
-        txtAddress.setText("fuck");
-        txtCoordinates.setText(latitude + " / " + longitude);
         if(mRequestingLocationUpdates)
             startLocationUpdates();
     }
@@ -274,8 +264,6 @@ public class getLocationPage extends AppCompatActivity  implements GoogleApiClie
     public void onLocationChanged(Location location) {
         mLastLocation = location;
         displayLocation();
-        txtAddress.setText(cityName);
-        txtCoordinates.setText(latitude + " / " + longitude);
     }
 }
 

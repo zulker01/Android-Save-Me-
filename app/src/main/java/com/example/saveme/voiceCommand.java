@@ -3,27 +3,18 @@ package com.example.saveme;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-
-import android.net.Uri;
-
-
-import android.widget.Button;
-
-
-import static java.lang.System.exit;
-
 import java.util.ArrayList;
 import java.util.Locale;
-
 
 
 public class voiceCommand extends AppCompatActivity {
@@ -78,7 +69,7 @@ public class voiceCommand extends AppCompatActivity {
 
         if( ActivityCompat.checkSelfPermission(voiceCommand.this, Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED)
         {
-            Toast menuToast = Toast.makeText(voiceCommand.this,R.string.phonePermission, Toast.LENGTH_LONG);
+            Toast menuToast = Toast.makeText(voiceCommand.this, R.string.phonePermission, Toast.LENGTH_LONG);
             menuToast.show();
             return ;
         }
