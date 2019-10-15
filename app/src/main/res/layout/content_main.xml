@@ -120,6 +120,37 @@
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:text="Send Voice"/>
+                 <androidx.cardview.widget.CardView
+                     android:id="@+id/register"
+                     android:layout_height="150dp"
+                     android:layout_width="150dp"
+                     android:clickable="true"
+                     android:focusable="true"
+                     app:cardCornerRadius="16dp"
+                     app:cardElevation="3dp"
+                     app:cardUseCompatPadding="true"
+                     android:foreground="?android:attr/selectableItemBackground">
+                     <LinearLayout
+
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent"
+                         android:orientation="vertical"
+                         android:gravity="center">
+
+                         <ImageView
+                             android:layout_width="80dp"
+                             android:layout_height="80dp"
+                             android:src="@drawable/ic_menu_manage"
+                             />
+                         <TextView
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:text="Register"/>
+
+                     </LinearLayout>
+
+                 </androidx.cardview.widget.CardView>
+
 
              </LinearLayout>
 

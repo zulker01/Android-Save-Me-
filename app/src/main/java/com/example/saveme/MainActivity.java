@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity
     CardView callButton;
     CardView messageButton;
     CardView voiceButton;
+    CardView registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity
         callButton=findViewById(R.id.callButton);
         voiceButton=findViewById(R.id.voiceButton);
         messageButton=findViewById(R.id.messageButton);
+        registerButton=findViewById(R.id.register);
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +64,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, voiceCommand.class);
+                intent.putExtra("pak",100);
+                startActivity(intent);
+            }
+        });
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Register.class);
                 intent.putExtra("pak",100);
                 startActivity(intent);
             }
