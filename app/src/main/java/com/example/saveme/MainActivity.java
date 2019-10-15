@@ -18,6 +18,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.FileInputStream;
+import java.nio.Buffer;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -156,9 +159,7 @@ public class MainActivity extends AppCompatActivity
         startActivity(smsIntent);
     }
 
-    private void sendVoice(){
 
-    }
 }
 
 
