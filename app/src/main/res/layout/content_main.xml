@@ -45,8 +45,8 @@
                     <ImageView
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/ic_call"
-                        />
+                        android:src="@drawable/ic_call" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -126,5 +126,16 @@
          </androidx.cardview.widget.CardView>
 
       </LinearLayout>
+       <Button
+           android:id="@+id/getLocation"
+           android:layout_width="200sp"
+           android:layout_height="50sp"
+           android:layout_marginTop="40sp"
+
+           android:text="@string/getLocationButton"
+           android:textSize="20sp"
+           android:background="@android:color/holo_blue_bright"
+
+           />
    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
