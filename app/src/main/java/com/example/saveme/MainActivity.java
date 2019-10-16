@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.emergencyContacts: {
-                //Toast.makeText(this, "hoise", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "hoise", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(MainActivity.this, ShowContactsActivity.class);
                 intent.putExtra("pak",100);
