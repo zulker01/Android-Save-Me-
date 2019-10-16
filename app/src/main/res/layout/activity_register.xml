@@ -21,7 +21,7 @@
         android:text="SubMit" />
 
     <EditText
-        android:id="@+id/editumber1"
+        android:id="@+id/editnumber1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="false"
@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Contact 2"
-        android:layout_below="@id/editumber1"
+        android:layout_below="@id/editnumber1"
         android:textColor="@android:color/black"
         android:textSize="30sp"
         />
@@ -83,7 +83,7 @@
         android:text="SubMit" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/editnumber3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="false"
