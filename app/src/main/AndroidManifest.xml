@@ -30,6 +30,9 @@
         <activity android:name=".voiceCommand"
             android:label="voiceCommand"
             android:theme="@style/AppTheme"/>
+        <activity android:name=".ShowContactsActivity"
+            android:label="@string/accept"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>
