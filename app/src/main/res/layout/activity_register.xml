@@ -29,7 +29,8 @@
         android:layout_alignTop="@+id/submit1"
         android:layout_toLeftOf="@+id/submit1"
         android:ems="10"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:hint="O1XXXXXXXXX"/>
 
     <TextView
         android:id="@+id/Number2tv"
@@ -59,7 +60,8 @@
         android:layout_alignTop="@+id/submit2"
         android:layout_toLeftOf="@+id/submit2"
         android:ems="10"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:hint="O1XXXXXXXXX"/>
 
     <TextView
         android:id="@+id/Number3tv"
@@ -89,5 +91,6 @@
         android:layout_alignTop="@+id/submit3"
         android:layout_toLeftOf="@+id/submit3"
         android:ems="10"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:hint="O1XXXXXXXXX"/>
 </RelativeLayout>
