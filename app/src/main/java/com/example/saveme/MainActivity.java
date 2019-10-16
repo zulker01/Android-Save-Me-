@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity
     CardView messageButton;
     CardView voiceButton;
 
+    public static double latitude = 0;
+    public static  double longitude = 0;
+    ShowContactsActivity showContactsActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -51,11 +56,38 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
+
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMessage();
-            }
+
+                    String phoneNumber="785373724";
+                    String smsMessage = "I am in danger, HELP ! \n\n I am at " +getLocationPage.cityName+"\n Latitude : "+latitude+"\nLongitude :  "+longitude+" ";
+
+                    if(checkPermission(Manifest.permission.SEND_SMS)){
+                        SmsManager smsManager = SmsManager.getDefault();
+                        smsManager.sendTextMessage(phoneNumber, null, smsMessage, null, null);
+                        Toast.makeText(MainActivity.this, "Message Sent!", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                    }
+
+                                           /* done by mahodi :
+                                            Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
+                                                   Uri.parse("sms:"+phoneNumber));
+                                           smsIntent.putExtra("sms_body", smsMessage);
+                                           startActivity(smsIntent);
+
+                                           */
+
+
+                }
+                public boolean checkPermission(String permission){
+                    int check = ContextCompat.checkSelfPermission(MainActivity.this, permission);
+                    return (check == PackageManager.PERMISSION_GRANTED);
+                }
+
         });
 
         voiceButton.setOnClickListener(new View.OnClickListener() {
@@ -109,9 +141,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.emergencyContacts: {
-                Toast.makeText(this, "hoise", Toast.LENGTH_SHORT).show();
-                //Intent intent = new Intent(this, BusListActivity.class);
-                //startActivity(intent);
+                //Toast.makeText(this, "hoise", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(MainActivity.this, ShowContactsActivity.class);
+                intent.putExtra("pak",100);
+                startActivity(intent);
                 break;
             }
 
