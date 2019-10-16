@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity
 
     public static double latitude = 0;
     public static  double longitude = 0;
+    ShowContactsActivity showContactsActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity
                  call();
             }
         });
+
+
 
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,8 +142,10 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.emergencyContacts: {
                 Toast.makeText(this, "hoise", Toast.LENGTH_SHORT).show();
-                //Intent intent = new Intent(this, BusListActivity.class);
-                //startActivity(intent);
+
+                Intent intent = new Intent(MainActivity.this, ShowContactsActivity.class);
+                intent.putExtra("pak",100);
+                startActivity(intent);
                 break;
             }
 

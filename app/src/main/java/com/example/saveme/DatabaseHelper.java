@@ -11,69 +11,48 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int version=1;
-    private static final String databaseName="ContactsDatabase.sqlite";
-    public static String APP_DATA_PATH="";
-    public static final String DB_SUB_PATH="/databases/" + databaseName;
-    private SQLiteDatabase dataBase;
-    private static final String tableName1="Contacts";
-    private static final String contactID="Contact_ID";
-    private static final String contactName="Contact_Name";
-    private static final String contactNumber="Contact_Number";
-    private static final String createContactsTable="create table "+tableName1+"("+contactID+" INTEGER primary key autoincrement, "+contactName+" varchar(100), "+contactNumber+" INTEGER);";
-    private static final String dropTable1="drop table if exists "+tableName1;
-    Context context;
+    private static final String Database_Name="ContactsDatabase.db";
+    private static final String Table_Name="Contacts";
+    private static final String col_1="ID";
+    private static final String col_2="NAME";
+    private static final String col_3="NUMBER";
+
     public DatabaseHelper(@Nullable Context context) {
-        super(context, databaseName, null, version);
-        APP_DATA_PATH=context.getApplicationInfo().dataDir;
-        this.context=context;
+        super(context, Database_Name, null, version);
+        SQLiteDatabase db = this.getWritableDatabase();
     }
-    public boolean openDataBase() throws SQLException {
-        String mPath = APP_DATA_PATH + DB_SUB_PATH;
-        //Note that this method assumes that the db file is already copied in place
-        dataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.OPEN_READWRITE);
-        return dataBase != null;
-    }
+
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        try{
-
-            db.execSQL(createContactsTable);
-            Toast.makeText(context, "Tables are created", Toast.LENGTH_SHORT).show();
-
-        } catch (Exception e) {
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        }
+        db.execSQL("create table " + Table_Name +"(Contact_ID INTEGER PRIMARY KEY AUTOINCREMENT, NAME TEXT, NUMBER TEXT )");
     }
 
-    @Override
-    public synchronized void close(){
-        if(dataBase != null) {dataBase.close();}
-        super.close();
-    }
 
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try{
-            db.execSQL(dropTable1);
-            Toast.makeText(context, "OnUpgrade method is called", Toast.LENGTH_SHORT).show();
-            onCreate(db);
-        } catch (Exception e) {
-            Toast.makeText(context, "upFailed", Toast.LENGTH_SHORT).show();
-        }
-    }
-    public Cursor displayAllContacts(){
-        SQLiteDatabase sqLiteDatabase=this.getWritableDatabase();
-        Cursor cursor= sqLiteDatabase.rawQuery("select * from "+tableName1 ,null);
-        return cursor;
+     db.execSQL("DROP TABLE IF EXISTS " + Table_Name);
+     onCreate(db);
     }
 
-    public void addContacts(String Name, int Number){
-        SQLiteDatabase sqLiteDatabase=this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(Name, Number);
-        sqLiteDatabase.insert("Contacts", null, values);
+    public boolean insertData (String name, String number){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(col_2, name);
+        contentValues.put(col_3, number);
+        long result = db.insert(Table_Name, null, contentValues);
+        if(result == -1)
+            return false;
+        else
+            return true;
     }
+
+    public Cursor getAllData(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res  = db.rawQuery("select * from " + Table_Name,null);
+        return res;
+    }
+
 }
