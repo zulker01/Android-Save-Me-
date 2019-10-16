@@ -13,6 +13,10 @@
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_menu_manage"
             android:title="tools" />
+        <item
+            android:id="@+id/nav_get_Location"
+            android:icon="@drawable/ic_get_location"
+            android:title="get_Location" />
     </group>
 
     <item android:title="Communicate">
