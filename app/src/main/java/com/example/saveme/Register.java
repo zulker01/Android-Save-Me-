@@ -45,8 +45,7 @@ public class Register extends AppCompatActivity {
             }
         });
 
-        submit3
-                .setOnClickListener(new View.OnClickListener() {
+        submit3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final EditText edt3 = (EditText)findViewById(R.id.editnumber3);
