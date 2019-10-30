@@ -1,7 +1,12 @@
 package com.example.saveme;
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -67,6 +73,117 @@ public class MainActivity extends AppCompatActivity
     ShowContactsActivity showContactsActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        AlarmManager alarmManager = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
+        long when = System.currentTimeMillis();         // notification time
+        Intent intent = new Intent(MainActivity.this,NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getService(MainActivity.this, 0, intent, 0);
+        alarmManager.setRepeating(AlarmManager.RTC, when, (AlarmManager.INTERVAL_FIFTEEN_MINUTES / 60), pendingIntent);
+
+
+
+        /*
+
+
+            AlarmManager alarmManager = (AlarmManager) this.getSystemService(this.ALARM_SERVICE);
+            long when = System.currentTimeMillis();         // notification time
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
+            alarmManager.setRepeating(AlarmManager.RTC, when, (AlarmManager.INTERVAL_FIFTEEN_MINUTES / 15), pendingIntent);
+
+
+
+         */
+
+
+        /*bt1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Calendar calendar=Calendar.getInstance();
+                Intent intent=new Intent(getApplicationContext(),Notification_Receiver.class);
+                PendingIntent pendingIntent=PendingIntent.getBroadcast(getApplicationContext(),100,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                AlarmManager alarmManager=(AlarmManager)getSystemService(ALARM_SERVICE);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_FIFTEEN_MINUTES,pendingIntent);
+
+
+
+            }
+        });
+         */
+
+        /*Intent intentAlarm = new Intent(this, AlarmReceiver.class);
+        System.out.println("calling Alarm receiver ");
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        //set the notification to repeat every fifteen minutes
+        long startTime = 1*60*1000; // 2 min
+        // set unique id to the pending item, so we can call it when needed
+        PendingIntent pi = PendingIntent.getBroadcast(this, 001, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setInexactRepeating(AlarmManager.RTC, SystemClock.elapsedRealtime() +
+                startTime, 60*1000, pi);
+
+         */
+
+
+
+
+/*
+        bt1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                NotificationCompat.Builder b = new NotificationCompat.Builder(getApplicationContext());
+
+                b.setAutoCancel(true)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setWhen(System.currentTimeMillis())
+                        .setSmallIcon(R.drawable.ic_notifications)
+                        .setTicker("Hearty365")
+                        .setContentTitle("Are you safe?")
+                        .setContentText("If not Tap Here")
+                        .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
+                        .setContentIntent(contentIntent)
+                        .setContentInfo("Info");
+
+
+                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(1, b.build());
+            }
+
+        });
+
+ */
+        int a=1;
+        if(a==1)
+        {
+            Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder b = new NotificationCompat.Builder(getApplicationContext());
+
+            b.setAutoCancel(true)
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setWhen(System.currentTimeMillis())
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setTicker("Hearty365")
+                    .setContentTitle("Are you safe?")
+                    .setContentText("If not Tap Here")
+                    .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
+                    .setContentIntent(contentIntent)
+                    .setContentInfo("Info");
+
+
+            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(1, b.build());
+        }
+
+
+
+
 
         //navigation things
         super.onCreate(savedInstanceState);
@@ -430,6 +547,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
     //location
+
+
 }
 
 
