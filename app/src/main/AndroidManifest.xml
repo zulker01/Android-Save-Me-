@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
-
+    <uses-permission android:name="android.permission.SEND_SMS"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -29,6 +29,12 @@
         </activity>
         <activity android:name=".voiceCommand"
             android:label="voiceCommand"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".ShowContactsActivity"
+            android:label="contact"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".ShowSavedLocation"
+            android:label="location"
             android:theme="@style/AppTheme"/>
     </application>
 
