@@ -6,19 +6,22 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 
 public class voiceCommand extends AppCompatActivity {
-
+    public  double latitude = 0;
+    public   double longitude = 0;
     private TextView txvResult;
 
     @Override
@@ -51,11 +54,13 @@ public class voiceCommand extends AppCompatActivity {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     txvResult.setText(result.get(0));
 
-                    if(result.get(0).equals("call now"))
+                    if(result.get(0).equals("save me"))
                     {
                         callNow();
+                        sendLoction();
 
                     }
+
                 }
                 break;
         }
@@ -74,5 +79,24 @@ public class voiceCommand extends AppCompatActivity {
             return ;
         }
         startActivity(callIntent);
+    }
+
+    public void sendLoction()
+    {
+        String phoneNumber="785373724";
+        String smsMessage = "I am in danger, HELP ! \n\n I am at " +getLocationPage.cityName+"\n Latitude : "+latitude+"\nLongitude :  "+longitude+" ";
+
+        if(checkPermission(Manifest.permission.SEND_SMS)){
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, smsMessage, null, null);
+            Toast.makeText(voiceCommand.this, "Message Sent!", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(voiceCommand.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public boolean checkPermission(String permission){
+        int check = ContextCompat.checkSelfPermission(voiceCommand.this, permission);
+        return (check == PackageManager.PERMISSION_GRANTED);
     }
 }
