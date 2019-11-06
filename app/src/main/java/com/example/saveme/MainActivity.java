@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,15 +37,18 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.material.navigation.NavigationView;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Set;
-
+import static com.google.android.gms.common.api.GoogleApiClient.*;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
+        implements NavigationView.OnNavigationItemSelectedListener,  ConnectionCallbacks,
+        OnConnectionFailedListener, LocationListener  {
     DrawerLayout drawer;
     CardView callButton;
     CardView messageButton;
@@ -248,7 +252,7 @@ public class MainActivity extends AppCompatActivity
 
                     //sendMessage();
                 String phoneNumber="05373724";
-                String smsMessage = "I am in danger, HELP ! \n\n I am at " +getLocationPage.cityName+
+                String smsMessage = "I am in danger, HELP ! \n\n I am at " +
                         "\n Latitude : "+latitude+"\nLongitude :  "+longitude+" \nLink : www.google.com/maps/place/"+latitude+","+longitude;
 
                 if(checkPermission(Manifest.permission.SEND_SMS)){
@@ -571,6 +575,21 @@ public class MainActivity extends AppCompatActivity
         if (locationManager != null) {
             locationManager.removeUpdates(MainActivity.this);
         }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        getLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
     //location
 
