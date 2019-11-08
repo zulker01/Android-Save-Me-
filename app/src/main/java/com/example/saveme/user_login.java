@@ -30,7 +30,7 @@ private ProgressDialog progressDialog;
 @Override
 protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_lo);
+        setContentView(R.layout.user_login);
 
         //getting firebase auth object
         firebaseAuth = FirebaseAuth.getInstance();
