@@ -361,6 +361,16 @@ public class MainActivity extends AppCompatActivity
                 break;
             }
 
+            case R.id.nav_login: {
+                Toast.makeText(this, "hoise", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(MainActivity.this, user_login.class);
+                intent.putExtra("pak",100);
+                startActivity(intent);
+                //finish();
+                break;
+            }
+
 
         }
             drawer.closeDrawer(GravityCompat.START);

@@ -39,7 +39,9 @@ public class user_registrationClass extends AppCompatActivity implements View.On
         setContentView(R.layout.user_registration);
 
         //initializing firebase auth object
+
         firebaseAuth = FirebaseAuth.getInstance();
+
 
         //if getCurrentUser does not returns null
         if(firebaseAuth.getCurrentUser() != null){
@@ -63,6 +65,9 @@ public class user_registrationClass extends AppCompatActivity implements View.On
         //attaching listener to button
         buttonSignup.setOnClickListener(this);
         textViewSignin.setOnClickListener(this);
+
+
+
     }
 
     private void registerUser(){

@@ -84,7 +84,7 @@ public class user_login extends AppCompatActivity implements View.OnClickListene
         //if the email and password are not empty
         //displaying a progress dialog
 
-        progressDialog.setMessage("Registering Please Wait...");
+        progressDialog.setMessage("Checking server . Please Wait...");
         progressDialog.show();
 
         //logging in the user
@@ -112,7 +112,7 @@ public class user_login extends AppCompatActivity implements View.OnClickListene
 
         if (view == textViewSignup) {
             finish();
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, user_registrationClass.class));
         }
     }
 }
