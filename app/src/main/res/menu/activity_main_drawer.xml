@@ -13,6 +13,10 @@
             android:id="@+id/emergencyContacts"
             android:icon="@drawable/ic_contact_phone_black_24dp"
             android:title="Emergency Contacts" />
+        <item
+            android:id="@+id/savedLocation"
+            android:icon="@drawable/ic_saved_location_black_24dp"
+            android:title="Saved Location" />
 
         <item
             android:id="@+id/nav_tools"
