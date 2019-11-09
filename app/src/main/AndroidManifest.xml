@@ -36,6 +36,10 @@
             android:name=".ShowContactsActivity"
             android:label="@string/accept"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ShowSavedLocation"
+            android:label="SavedLocation"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
