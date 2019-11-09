@@ -356,6 +356,15 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             }
+            case R.id.savedLocation: {
+                Toast.makeText(this, "hoise", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(MainActivity.this, ShowSavedLocation.class);
+                intent.putExtra("pak",100);
+                startActivity(intent);
+                break;
+            }
+
 
 
         }
@@ -380,8 +389,8 @@ public class MainActivity extends AppCompatActivity
 /*
     private void sendMessage(){
         String number="01785373724";
-        String pak =  getLocationPage.cityName;
-        Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
+        String pak =  getLocationPage.cityName
+,        Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
                 Uri.parse("sms:"+number));
         smsIntent.putExtra("sms_body", "Help Me, I am in Danger"+pak);
         startActivity(smsIntent);
