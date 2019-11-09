@@ -410,6 +410,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG, "onLocationChanged");
+
+        /*
+            here we will add the notification functions.
+            whenever location is changed , the timer will wait for 15 minutes.
+            then it will check if the location is saved previously.
+            if not  , a notification will be sent
+         */
         updateUI(location);
     }
 
