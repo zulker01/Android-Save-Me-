@@ -26,17 +26,22 @@ public class ShowContactsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_contacts);
         myDb = new DatabaseHelper(this);
 
-        edit_Name =(EditText) findViewById(R.id.editText2);
+        /*edit_Name =(EditText) findViewById(R.id.editText2);
         edit_Number = (EditText) findViewById(R.id.editText3);
         edit_getId = (EditText) findViewById(R.id.editText);
         addData = (Button) findViewById(R.id.btnAddData);
         viewAll = (Button) findViewById(R.id.btnViewData);
+
+        addData();
+        viewAll();*/
+
         updateData = (Button) findViewById(R.id.btnupdateData);
         deleteData = (Button) findViewById(R.id.btndeleteData);
         AddData();
         viewAll();
         UpdateData();
         DeleteData();
+
     }
 
 
