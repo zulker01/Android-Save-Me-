@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,17 +39,24 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Locale;
 
+import java.util.Set;
+import static com.google.android.gms.common.api.GoogleApiClient.*;
+
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
+        implements NavigationView.OnNavigationItemSelectedListener,  ConnectionCallbacks,
+        OnConnectionFailedListener, LocationListener  {
     DrawerLayout drawer;
     CardView callButton;
     CardView messageButton;
@@ -228,6 +236,8 @@ public class MainActivity extends AppCompatActivity
         callButton=findViewById(R.id.callButton);
         voiceButton=findViewById(R.id.voiceButton);
         messageButton=findViewById(R.id.messageButton);
+
+
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -271,16 +281,18 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-                    String phoneNumber="785373724";
-                    String smsMessage = "I am in danger, HELP ! \n\n I am at " +getLocationPage.cityName+"\n Latitude : "+latitude+"\nLongitude :  "+longitude+" ";
+                    //sendMessage();
+                String phoneNumber="05373724";
+                String smsMessage = "I am in danger, HELP ! \n\n I am at " +
+                        "\n Latitude : "+latitude+"\nLongitude :  "+longitude+" \nLink : www.google.com/maps/place/"+latitude+","+longitude;
 
-                    if(checkPermission(Manifest.permission.SEND_SMS)){
-                        SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(phoneNumber, null, smsMessage, null, null);
-                        Toast.makeText(MainActivity.this, "Message Sent!", Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
-                    }
+                if(checkPermission(Manifest.permission.SEND_SMS)){
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(phoneNumber, null, smsMessage, null, null);
+                    Toast.makeText(MainActivity.this, "Message Sent!", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                }
 
                                            /* done by mahodi :
                                             Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
@@ -292,10 +304,11 @@ public class MainActivity extends AppCompatActivity
 
 
                 }
-                public boolean checkPermission(String permission){
-                    int check = ContextCompat.checkSelfPermission(MainActivity.this, permission);
-                    return (check == PackageManager.PERMISSION_GRANTED);
-                }
+            public boolean checkPermission(String permission){
+                int check = ContextCompat.checkSelfPermission(MainActivity.this, permission);
+                return (check == PackageManager.PERMISSION_GRANTED);
+            }
+
 
         });
 
@@ -310,10 +323,29 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        // if app started with voice command ( google assistant ) or tap
+        Set<String> categories = getIntent().getCategories();
+        if(categories != null && categories.contains(Intent.CATEGORY_LAUNCHER)) {
+            Toast.makeText(MainActivity.this, "started via voice ", Toast.LENGTH_SHORT).show();
+            //Log.i(LOGTAG, "app started via voice");
+        }
+        else{
+           // Log.i(LOGTAG, "app started with user tap");
+            Toast.makeText(MainActivity.this, "tap start ", Toast.LENGTH_SHORT).show();
+        }
+
 
 
     }
 
+    //message
+
+
+
+    public void sendMessage()
+    {
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -359,6 +391,25 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             }
+            case R.id.savedLocation: {
+                Toast.makeText(this, "hoise", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(MainActivity.this, ShowSavedLocation.class);
+                intent.putExtra("pak",100);
+                startActivity(intent);
+                break;
+            }
+
+
+            case R.id.nav_login: {
+                Toast.makeText(this, "hoise", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(MainActivity.this, user_login.class);
+                intent.putExtra("pak",100);
+                startActivity(intent);
+                //finish();
+                break;
+            }
 
 
         }
@@ -368,7 +419,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void call() {
-        String number="01785373724";
+        String number="185373724";
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:"+number));
 
@@ -380,16 +431,16 @@ public class MainActivity extends AppCompatActivity
         }
         startActivity(callIntent);
     }
-
+/*
     private void sendMessage(){
         String number="01785373724";
-        String pak =  getLocationPage.cityName;
-        Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
+        String pak =  getLocationPage.cityName
+,        Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
                 Uri.parse("sms:"+number));
         smsIntent.putExtra("sms_body", "Help Me, I am in Danger"+pak+fulladdress);
         startActivity(smsIntent);
     }
-
+*/
     private void sendVoice(){
 
     }
@@ -565,6 +616,7 @@ public class MainActivity extends AppCompatActivity
         latitude = loc.getLatitude();
         longitude = loc.getLongitude();
         //tvTime.setText(DateFormat.getTimeInstance().format(loc.getTime()));
+        Toast.makeText(MainActivity.this, "location  Sent! "+latitude+" "+longitude, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -573,6 +625,21 @@ public class MainActivity extends AppCompatActivity
         if (locationManager != null) {
             locationManager.removeUpdates(MainActivity.this);
         }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        getLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
     //location
 

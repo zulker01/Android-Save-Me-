@@ -84,7 +84,7 @@ public class voiceCommand extends AppCompatActivity {
     public void sendLoction()
     {
         String phoneNumber="785373724";
-        String smsMessage = "I am in danger, HELP ! \n\n I am at " +getLocationPage.cityName+"\n Latitude : "+latitude+"\nLongitude :  "+longitude+" ";
+        String smsMessage = "I am in danger, HELP ! \n\n I am at " +"\n Latitude : "+latitude+"\nLongitude :  "+longitude+" ";
 
         if(checkPermission(Manifest.permission.SEND_SMS)){
             SmsManager smsManager = SmsManager.getDefault();

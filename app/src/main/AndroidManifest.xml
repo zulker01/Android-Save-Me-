@@ -36,6 +36,15 @@
             android:name=".ShowContactsActivity"
             android:label="@string/accept"
             android:theme="@style/AppTheme" />
+
+        <activity android:name=".user_registrationClass"></activity>
+        <activity android:name=".user_login"></activity>
+        <activity android:name=".logged_in"></activity>
+        <activity
+            android:name=".ShowSavedLocation"
+            android:label="SavedLocation"
+            android:theme="@style/AppTheme" />
+
     </application>
 
 </manifest>
