@@ -10,7 +10,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -41,10 +43,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
+
+import java.util.List;
+import java.util.Locale;
+
 import java.util.Set;
 import static com.google.android.gms.common.api.GoogleApiClient.*;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,  ConnectionCallbacks,
@@ -56,6 +64,29 @@ public class MainActivity extends AppCompatActivity
 
     public  double latitude = 0;
     public   double longitude = 0;
+    String  address,area,city,country,postalcode,fulladdress;
+
+
+
+
+    public Geocoder geocoder=new Geocoder(this, Locale.getDefault());
+    public List<Address> addresses;
+
+    {
+        try {
+            addresses = geocoder.getFromLocation(latitude,longitude,1);
+            address=addresses.get(0).getAddressLine(0);
+            area=addresses.get(0).getLocality();
+            city=addresses.get(0).getAdminArea();
+            country=addresses.get(0).getCountryCode();
+            postalcode=addresses.get(0).getPostalCode();
+
+            fulladdress=address+","+area+","+city+","+country+","+postalcode;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // location
 
@@ -406,7 +437,7 @@ public class MainActivity extends AppCompatActivity
         String pak =  getLocationPage.cityName
 ,        Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
                 Uri.parse("sms:"+number));
-        smsIntent.putExtra("sms_body", "Help Me, I am in Danger"+pak);
+        smsIntent.putExtra("sms_body", "Help Me, I am in Danger"+pak+fulladdress);
         startActivity(smsIntent);
     }
 */
