@@ -44,7 +44,11 @@ import com.google.android.material.navigation.NavigationView;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 import static com.google.android.gms.common.api.GoogleApiClient.*;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,  ConnectionCallbacks,
@@ -54,9 +58,15 @@ public class MainActivity extends AppCompatActivity
     CardView messageButton;
     CardView voiceButton;
 
-    public  double latitude = 0;
-    public   double longitude = 0;
+    public static double latitude = 0.00;
+    public  static  double longitude = 00.00;
 
+    // scheduling notification
+
+
+    ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+    //scheduling notification
     // location
 
     final String TAG = "GPS";
@@ -79,7 +89,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
+        Log.d(TAG, "Connection mara ");
         AlarmManager alarmManager = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
         long when = System.currentTimeMillis();         // notification time
         Intent intent = new Intent(MainActivity.this,NotificationReceiver.class);
@@ -165,25 +175,15 @@ public class MainActivity extends AppCompatActivity
         int a=1;
         if(a==1)
         {
-            Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+            // this will send notificaion  after wvery 3 seconds
+            scheduler.scheduleWithFixedDelay(new Runnable() {
+                @Override
+                public void run() {
+                    // your code
+                    sendNotification();
+                }
+            }, 3, 3, SECONDS);
 
-            NotificationCompat.Builder b = new NotificationCompat.Builder(getApplicationContext());
-
-            b.setAutoCancel(true)
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .setTicker("Hearty365")
-                    .setContentTitle("Are you safe?")
-                    .setContentText("If not Tap Here")
-                    .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
-                    .setContentIntent(contentIntent)
-                    .setContentInfo("Info");
-
-
-            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(1, b.build());
         }
 
 
@@ -307,6 +307,29 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+    public void sendNotification()
+    {
+        Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder b = new NotificationCompat.Builder(getApplicationContext());
+
+        b.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.ic_notification)
+                .setTicker("Hearty365")
+                .setContentTitle("Are you safe?")
+                .setContentText("If not Tap Here")
+                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
+                .setContentIntent(contentIntent)
+                .setContentInfo("Info");
+
+
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, b.build());
+    }
     //message
 
 
@@ -426,6 +449,7 @@ public class MainActivity extends AppCompatActivity
             then it will check if the location is saved previously.
             if not  , a notification will be sent
          */
+        //getLocation();
         updateUI(location);
     }
 
@@ -591,6 +615,7 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "updateUI");
         latitude = loc.getLatitude();
         longitude = loc.getLongitude();
+        Log.d(TAG, latitude+" "+longitude);
         //tvTime.setText(DateFormat.getTimeInstance().format(loc.getTime()));
         Toast.makeText(MainActivity.this, "location  Sent! "+latitude+" "+longitude, Toast.LENGTH_SHORT).show();
     }
