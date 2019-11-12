@@ -45,13 +45,25 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import java.util.Calendar;
+
 
 import java.util.List;
 import java.util.Locale;
 
+
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
+
 import static com.google.android.gms.common.api.GoogleApiClient.*;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import java.util.Date;
+
 
 
 public class MainActivity extends AppCompatActivity
@@ -62,13 +74,27 @@ public class MainActivity extends AppCompatActivity
     CardView messageButton;
     CardView voiceButton;
 
+
+    // danger notification
+    public int dangerCheckCounter = 0;
+
+
+    // getting date time
+    private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
+    public static double latitude = 0.00;
+    public  static  double longitude = 00.00;
+
+    // scheduling notification
+
+
     public  double latitude = 0;
     public   double longitude = 0;
     String  address,area,city,country,postalcode,fulladdress;
 
 
 
-
+/*
     public Geocoder geocoder=new Geocoder(this, Locale.getDefault());
     public List<Address> addresses;
 
@@ -88,6 +114,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+*/
+    ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+    //scheduling notification
+
+    public long initialTimetoCheckLocation = 60;
+    public long delayTimetoCheckLocation = 2*60;
     // location
 
     final String TAG = "GPS";
@@ -110,7 +143,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
+        Log.d(TAG, "Connection mara ");
         AlarmManager alarmManager = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
         long when = System.currentTimeMillis();         // notification time
         Intent intent = new Intent(MainActivity.this,NotificationReceiver.class);
@@ -193,29 +226,38 @@ public class MainActivity extends AppCompatActivity
         });
 
  */
-        int a=1;
-        if(a==1)
-        {
-            Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            NotificationCompat.Builder b = new NotificationCompat.Builder(getApplicationContext());
+        Calendar cal = Calendar.getInstance();
+        long  milliSec1 = cal.getTimeInMillis();
 
-            b.setAutoCancel(true)
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .setTicker("Hearty365")
-                    .setContentTitle("Are you safe?")
-                    .setContentText("If not Tap Here")
-                    .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
-                    .setContentIntent(contentIntent)
-                    .setContentInfo("Info");
+        //Toast.makeText(MainActivity.this,sdf.format(cal.getTime())+" "+ milliSec1,Toast.LENGTH_LONG).show();
+
+            // this will send notification  after every 3 seconds
+            scheduler.scheduleWithFixedDelay(new Runnable() {
+                @Override
+                public void run() {
+                   // sendNotification();
+                    //here the function will check if current location is a safe location saved prevoiusly
+                    /*
+                    if( latitude = safe latitude && longitude =  safe longitude )
+                            do nothing ;
+                    else
+                    {
+                        dangerCheckCounter ++;
+                    }
+
+                    if(dangerCheckCounter == 6 )  : if we assume the app will check location in every 30 minutes,
+                                                    then it will send notification after 3 hours , checkning if he is safe
+                     */
+
+                    if(dangerCheckCounter > 5)
+                    {
+                        sendNotification();
+                    }
+                }
+            }, initialTimetoCheckLocation, delayTimetoCheckLocation, SECONDS);
 
 
-            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(1, b.build());
-        }
 
 
 
@@ -338,6 +380,29 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+    public void sendNotification()
+    {
+        Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder b = new NotificationCompat.Builder(getApplicationContext());
+
+        b.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.ic_notification)
+                .setTicker("Hearty365")
+                .setContentTitle("Are you safe?")
+                .setContentText("If not Tap Here")
+                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
+                .setContentIntent(contentIntent)
+                .setContentInfo("Info");
+
+
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, b.build());
+    }
     //message
 
 
@@ -450,6 +515,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG, "onLocationChanged");
+
+        /*
+            here we will add the notification functions.
+            whenever location is changed , the timer will wait for 15 minutes.
+            then it will check if the location is saved previously.
+            if not  , a notification will be sent
+         */
+        //getLocation();
         updateUI(location);
     }
 
@@ -615,6 +688,7 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "updateUI");
         latitude = loc.getLatitude();
         longitude = loc.getLongitude();
+        Log.d(TAG, latitude+" "+longitude);
         //tvTime.setText(DateFormat.getTimeInstance().format(loc.getTime()));
         Toast.makeText(MainActivity.this, "location  Sent! "+latitude+" "+longitude, Toast.LENGTH_SHORT).show();
     }
