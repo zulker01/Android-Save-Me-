@@ -88,8 +88,7 @@ public class MainActivity extends AppCompatActivity
     // scheduling notification
 
 
-    public  double latitude = 0;
-    public   double longitude = 0;
+  
     String  address,area,city,country,postalcode,fulladdress;
 
 
