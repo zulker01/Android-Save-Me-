@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -37,7 +38,9 @@ public class NotificationReceiver extends BroadcastReceiver {
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(context, 0, resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
-        mBuilder.setContentIntent(resultPendingIntent);
+        //mBuilder.setContentIntent(resultPendingIntent);
+        //Toast.makeText(this,"tapped on notification ",Toast.LENGTH_LONG).show();
+       // Toast.makeText(MainActivity.class,"tapped noti",Toast.LENGTH_LONG).show();
         mBuilder.setAutoCancel(true);
         // Sets an ID for the notification
         int mNotificationId = 001;

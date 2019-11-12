@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity
     CardView messageButton;
     CardView voiceButton;
 
+    // danger notification
+    public int dangerCheckCounter = 0;
+
 
     // getting date time
     private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -73,6 +76,9 @@ public class MainActivity extends AppCompatActivity
     ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     //scheduling notification
+
+    public long initialTimetoCheckLocation = 60;
+    public long delayTimetoCheckLocation = 2*60;
     // location
 
     final String TAG = "GPS";
@@ -182,23 +188,34 @@ public class MainActivity extends AppCompatActivity
         Calendar cal = Calendar.getInstance();
         long  milliSec1 = cal.getTimeInMillis();
 
-        //Toast.makeText(MainActivity.this,"fuck" + sdf.format(cal.getTime())+" "+ milliSec1,Toast.LENGTH_LONG).show();
-        int a=1;
-        if(a==1)
-        {
-            // this will send notificaion  after wvery 3 seconds
+        //Toast.makeText(MainActivity.this,sdf.format(cal.getTime())+" "+ milliSec1,Toast.LENGTH_LONG).show();
+
+            // this will send notification  after every 3 seconds
             scheduler.scheduleWithFixedDelay(new Runnable() {
                 @Override
                 public void run() {
-                    // your code
                    // sendNotification();
-                  //  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                   // Date date = new Date();
-                    //Toast.makeText(MainActivity.this,"fuck",Toast.LENGTH_LONG).show();
-                }
-            }, 3, 3, SECONDS);
+                    //here the function will check if current location is a safe location saved prevoiusly
+                    /*
+                    if( latitude = safe latitude && longitude =  safe longitude )
+                            do nothing ;
+                    else
+                    {
+                        dangerCheckCounter ++;
+                    }
 
-        }
+                    if(dangerCheckCounter == 6 )  : if we assume the app will check location in every 30 minutes,
+                                                    then it will send notification after 3 hours , checkning if he is safe
+                     */
+
+                    if(dangerCheckCounter > 5)
+                    {
+                        sendNotification();
+                    }
+                }
+            }, initialTimetoCheckLocation, delayTimetoCheckLocation, SECONDS);
+
+
 
 
 
