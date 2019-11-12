@@ -42,14 +42,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.material.navigation.NavigationView;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 import static com.google.android.gms.common.api.GoogleApiClient.*;
 import static java.util.concurrent.TimeUnit.SECONDS;
-
+import java.util.Date;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,  ConnectionCallbacks,
         OnConnectionFailedListener, LocationListener  {
@@ -57,6 +59,10 @@ public class MainActivity extends AppCompatActivity
     CardView callButton;
     CardView messageButton;
     CardView voiceButton;
+
+
+    // getting date time
+    private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
     public static double latitude = 0.00;
     public  static  double longitude = 00.00;
@@ -172,6 +178,11 @@ public class MainActivity extends AppCompatActivity
         });
 
  */
+
+        Calendar cal = Calendar.getInstance();
+        long  milliSec1 = cal.getTimeInMillis();
+
+        //Toast.makeText(MainActivity.this,"fuck" + sdf.format(cal.getTime())+" "+ milliSec1,Toast.LENGTH_LONG).show();
         int a=1;
         if(a==1)
         {
@@ -180,7 +191,10 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void run() {
                     // your code
-                    sendNotification();
+                   // sendNotification();
+                  //  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                   // Date date = new Date();
+                    //Toast.makeText(MainActivity.this,"fuck",Toast.LENGTH_LONG).show();
                 }
             }, 3, 3, SECONDS);
 
