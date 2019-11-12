@@ -1,5 +1,6 @@
 package com.example.saveme;
 
+import android.Manifest;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -10,16 +11,90 @@ import android.content.Intent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+
+
+public class NotificationReceiver extends AppCompatActivity {
+
+    private Button mulai;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        callNow();
+        sendLoction();
+        MainActivity.makezero();
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notification_receiver);
+
+        mulai = (Button) findViewById(R.id.btnmenu);
+
+        mulai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NotificationReceiver.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 
 
 
-public class NotificationReceiver extends BroadcastReceiver {
+
+    public void callNow()
+    {
+        String number="01785373724";
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:"+number));
+
+        if( ActivityCompat.checkSelfPermission(NotificationReceiver.this, Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED)
+        {
+            Toast menuToast = Toast.makeText(NotificationReceiver.this, R.string.phonePermission, Toast.LENGTH_LONG);
+            menuToast.show();
+            return ;
+        }
+        startActivity(callIntent);
+    }
+
+    public void sendLoction()
+    {
+        String phoneNumber="785373724";
+        String smsMessage = "I am in danger, HELP ! \n\n I am at " +"\n Latitude : "+MainActivity.latitude+"\nLongitude :  "+MainActivity.longitude+" ";
+
+        if(checkPermission(Manifest.permission.SEND_SMS)){
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, smsMessage, null, null);
+            Toast.makeText(NotificationReceiver.this, "Message Sent!", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(NotificationReceiver.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public boolean checkPermission(String permission){
+        int check = ContextCompat.checkSelfPermission(NotificationReceiver.this, permission);
+        return (check == PackageManager.PERMISSION_GRANTED);
+    }
+}
+
+
+
+//public class NotificationReceiver extends BroadcastReceiver {
+    /*
     public NotificationReceiver() {
+
     }
 
     @Override
@@ -48,6 +123,8 @@ public class NotificationReceiver extends BroadcastReceiver {
         mgr.notify(mNotificationId, mBuilder.build());
     }
 }
+
+     */
 
 /*
 public class NotificationReceiver extends IntentService {

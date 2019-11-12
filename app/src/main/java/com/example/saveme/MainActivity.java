@@ -76,7 +76,12 @@ public class MainActivity extends AppCompatActivity
 
 
     // danger notification
-    public int dangerCheckCounter = 0;
+    public static int dangerCheckCounter = 0;
+
+    public static void makezero()
+    {
+        dangerCheckCounter=0;
+    }
 
 
     // getting date time
@@ -255,6 +260,11 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
             }, initialTimetoCheckLocation, delayTimetoCheckLocation, SECONDS);
+            int b=0;
+            if(b==0)
+            {
+                sendNotification();
+            }
 
 
 
@@ -382,7 +392,7 @@ public class MainActivity extends AppCompatActivity
 
     public void sendNotification()
     {
-        Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent1 = new Intent(getApplicationContext(),NotificationReceiver.class);
         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder b = new NotificationCompat.Builder(getApplicationContext());
