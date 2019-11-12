@@ -18,10 +18,11 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static com.example.saveme.MainActivity.longitude;
+
 
 public class voiceCommand extends AppCompatActivity {
-    public  double latitude = 0;
-    public   double longitude = 0;
+
     private TextView txvResult;
 
     @Override
@@ -84,7 +85,7 @@ public class voiceCommand extends AppCompatActivity {
     public void sendLoction()
     {
         String phoneNumber="785373724";
-        String smsMessage = "I am in danger, HELP ! \n\n I am at " +"\n Latitude : "+latitude+"\nLongitude :  "+longitude+" ";
+        String smsMessage = "I am in danger, HELP ! \n\n I am at " +"\n Latitude : "+MainActivity.latitude+"\nLongitude :  "+MainActivity.longitude+" ";
 
         if(checkPermission(Manifest.permission.SEND_SMS)){
             SmsManager smsManager = SmsManager.getDefault();
