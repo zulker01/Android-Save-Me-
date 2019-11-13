@@ -77,9 +77,12 @@ public class MainActivity extends AppCompatActivity
     CardView messageButton;
     CardView voiceButton;
 
+    // calling
+    private static final int REQUEST_CALL = 1;
 
+    //messaging
 
-
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
 
     // danger notification
     public static int dangerCheckCounter = 0;
@@ -431,6 +434,8 @@ public class MainActivity extends AppCompatActivity
             smsManager.sendTextMessage(phoneNumber, null, smsMessage, null, null);
             Toast.makeText(MainActivity.this, "Message Sent!", Toast.LENGTH_SHORT).show();
         }else {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.SEND_SMS},MY_PERMISSIONS_REQUEST_SEND_SMS);
             Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
         }
 
@@ -536,10 +541,14 @@ public class MainActivity extends AppCompatActivity
         {
             Toast menuToast = Toast.makeText(MainActivity.this,R.string.phonePermission, Toast.LENGTH_LONG);
             menuToast.show();
-            return ;
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+           // return ;
         }
-        startActivity(callIntent);
-    }
+        else {
+            startActivity(callIntent);
+        }
+        }
 /*
     private void sendMessage(){
         String number="01785373724";
@@ -680,6 +689,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
+           /* if (requestCode == REQUEST_CALL) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    call();
+                } else {
+                    Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
+                }
+
+            */
             case ALL_PERMISSIONS_RESULT:
                 Log.d(TAG, "onRequestPermissionsResult");
                 for (String perms : permissionsToRequest) {
