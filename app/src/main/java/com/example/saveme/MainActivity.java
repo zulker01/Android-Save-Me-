@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
     // danger notification
     public static int dangerCheckCounter = 0;
 
