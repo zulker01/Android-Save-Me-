@@ -26,14 +26,14 @@ public class ShowContactsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_contacts);
         myDb = new DatabaseHelper(this);
 
-        /*edit_Name =(EditText) findViewById(R.id.editText2);
+        edit_Name =(EditText) findViewById(R.id.editText2);
         edit_Number = (EditText) findViewById(R.id.editText3);
         edit_getId = (EditText) findViewById(R.id.editText);
         addData = (Button) findViewById(R.id.btnAddData);
         viewAll = (Button) findViewById(R.id.btnViewData);
 
-        addData();
-        viewAll();*/
+       // addData();
+       // viewAll();
 
         updateData = (Button) findViewById(R.id.btnupdateData);
         deleteData = (Button) findViewById(R.id.btndeleteData);
@@ -49,7 +49,7 @@ public class ShowContactsActivity extends AppCompatActivity {
         deleteData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer deleteRows = myDb.deleteData(edit_getId.getText().toString());
+                Integer deleteRows = myDb.deleteData(edit_Number.getText().toString());
                 if(deleteRows >0)
                     Toast.makeText(ShowContactsActivity.this, " Data deleted",Toast.LENGTH_SHORT).show();
                 else
@@ -90,7 +90,7 @@ public class ShowContactsActivity extends AppCompatActivity {
         addData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isInserted = myDb.insertData(edit_getId.getText().toString(),edit_Name.getText().toString(), edit_Number.getText().toString());
+                boolean isInserted = myDb.insertData(edit_Name.getText().toString(), edit_Number.getText().toString());
                 if(isInserted == true)
                     Toast.makeText(ShowContactsActivity.this, " Data Inserted",Toast.LENGTH_SHORT).show();
                 else
@@ -124,7 +124,6 @@ public class ShowContactsActivity extends AppCompatActivity {
             }
         });
     }
-
     public void showMessage(String title, String Message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);

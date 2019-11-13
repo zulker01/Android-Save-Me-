@@ -20,6 +20,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String col_2="NAME";
     private static final String col_3="NUMBER";
 
+    static DatabaseHelper databaseHelper;
+
     public DatabaseHelper(@Nullable Context context) {
         super(context, Database_Name, null, version);
         SQLiteDatabase db = this.getWritableDatabase();
@@ -29,8 +31,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + Table_Name +"(ID TEXT PRIMARY KEY , NAME TEXT, NUMBER TEXT )");
+        db.execSQL("create table " + Table_Name +"(ID INTEGER PRIMARY KEY AUTOINCREMENT , NAME TEXT, NUMBER TEXT PRIMARY KEY )");
+        databaseHelper = this;
     }
+
+
 
 
 
@@ -40,10 +45,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData (String id, String name, String number){
+    public  static DatabaseHelper getInstance(){
+        return databaseHelper;
+    }
+
+
+    public boolean insertData ( String name, String number){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(col_1, id);
+        //contentValues.put(col_1, id);
         contentValues.put(col_2, name);
         contentValues.put(col_3, number);
         long result = db.insert(Table_Name, null, contentValues);
@@ -66,21 +76,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(col_1, id);
         contentValues.put(col_2, name);
         contentValues.put(col_3, number);
-        db.update(Table_Name,contentValues,"ID =?",new String[]{id});
+        db.update(Table_Name,contentValues,"NUMBER =?",new String[]{number});
         return true;
     }
 
-    public Integer deleteData(String id){
+    public Integer deleteData(String number){
         SQLiteDatabase db = this.getWritableDatabase() ;
-        return db.delete(Table_Name,"ID = ?",new String[]{id});
+        return db.delete(Table_Name,"NUMBER = ?",new String[]{number});
     }
 
-    public String getNumber() {
+    public String getNumber(String id) {
+       // id = "1";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select NUMBER from" + Table_Name + "", null);
-        String mara;
+        Cursor res = db.rawQuery("select NUMBER from" + Table_Name + "where GROUP BY ID = ?",new String[]{id});
+       // String mara;
 
-        String textView = res.getString(3);
+        String textView = res.getString(2);
         return textView;
     }
 
