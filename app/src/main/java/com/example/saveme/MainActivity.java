@@ -107,27 +107,27 @@ public class MainActivity extends AppCompatActivity
 
 
 
-/*
-    public Geocoder geocoder=new Geocoder(this, Locale.getDefault());
-    public List<Address> addresses;
+    /*
+            public Geocoder geocoder=new Geocoder(this, Locale.getDefault());
+            public List<Address> addresses;
 
-    {
-        try {
-            addresses = geocoder.getFromLocation(latitude,longitude,1);
-            address=addresses.get(0).getAddressLine(0);
-            area=addresses.get(0).getLocality();
-            city=addresses.get(0).getAdminArea();
-            country=addresses.get(0).getCountryCode();
-            postalcode=addresses.get(0).getPostalCode();
+            {
+                try {
+                    addresses = geocoder.getFromLocation(latitude,longitude,1);
+                    address=addresses.get(0).getAddressLine(0);
+                    area=addresses.get(0).getLocality();
+                    city=addresses.get(0).getAdminArea();
+                    country=addresses.get(0).getCountryCode();
+                    postalcode=addresses.get(0).getPostalCode();
 
-            fulladdress=address+","+area+","+city+","+country+","+postalcode;
+                    fulladdress=address+","+area+","+city+","+country+","+postalcode;
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
-*/
+        */
     ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     //scheduling notification
@@ -343,6 +343,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
+
+
                     sendMessage();
                // DatabaseHelper databaseHelper = new DatabaseHelper(null);
                 //String mara = DatabaseHelper.getInstance().getNumber("1");
@@ -422,12 +424,11 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
     public void sendMessage()
     {
         String phoneNumber="05373724";
         String smsMessage = "I am in danger, HELP ! \n\n I am at " +
-                "\n Latitude : "+latitude+"\nLongitude :  "+longitude+" \nLink : www.google.com/maps/place/"+latitude+","+longitude;
+                "\n Latitude : "+latitude+"\nLongitude :  "+longitude+" \nLink : www.google.com/maps/place/"+latitude+","+longitude+"\n"+getCompleteAddressString(latitude,longitude);
 
         if(checkMessagePermission(Manifest.permission.SEND_SMS)){
             SmsManager smsManager = SmsManager.getDefault();
@@ -789,6 +790,31 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+
+    public String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                //Log.w("My Current loction address", strReturnedAddress.toString());
+            } else {
+                //Log.w("My Current loction address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+           // Log.w("My Current loction address", "Canont get Address!");
+        }
+        return strAdd;
     }
     //location
 
