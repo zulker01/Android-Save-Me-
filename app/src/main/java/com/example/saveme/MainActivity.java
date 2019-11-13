@@ -340,36 +340,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-                    //sendMessage();
+                    sendMessage();
                // DatabaseHelper databaseHelper = new DatabaseHelper(null);
                 //String mara = DatabaseHelper.getInstance().getNumber("1");
                 //System.out.println(mara);
-                String phoneNumber="01521255917";
-                String smsMessage = "I am in danger, HELP ! \n\n I am at " +
-                        "\n Latitude : "+latitude+"\nLongitude :  "+longitude+" \nLink : www.google.com/maps/place/"+latitude+","+longitude;
-
-                if(checkPermission(Manifest.permission.SEND_SMS)){
-                    SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(phoneNumber, null, smsMessage, null, null);
-                    Toast.makeText(MainActivity.this, "Message Sent!", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
-                }
-
-                                           /* done by mahodi :
-                                            Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
-                                                   Uri.parse("sms:"+phoneNumber));
-                                           smsIntent.putExtra("sms_body", smsMessage);
-                                           startActivity(smsIntent);
-
-                                           */
-
 
                 }
-            public boolean checkPermission(String permission){
-                int check = ContextCompat.checkSelfPermission(MainActivity.this, permission);
-                return (check == PackageManager.PERMISSION_GRANTED);
-            }
+
 
 
         });
@@ -442,9 +419,36 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
     public void sendMessage()
     {
+        String phoneNumber="05373724";
+        String smsMessage = "I am in danger, HELP ! \n\n I am at " +
+                "\n Latitude : "+latitude+"\nLongitude :  "+longitude+" \nLink : www.google.com/maps/place/"+latitude+","+longitude;
 
+        if(checkMessagePermission(Manifest.permission.SEND_SMS)){
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, smsMessage, null, null);
+            Toast.makeText(MainActivity.this, "Message Sent!", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+        }
+
+                                           /* done by mahodi :
+                                            Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
+                                                   Uri.parse("sms:"+phoneNumber));
+                                           smsIntent.putExtra("sms_body", smsMessage);
+                                           startActivity(smsIntent);
+
+                                           */
+
+
+    }
+
+
+    public boolean checkMessagePermission(String permission){
+        int check = ContextCompat.checkSelfPermission(MainActivity.this, permission);
+        return (check == PackageManager.PERMISSION_GRANTED);
     }
 
     @Override
@@ -520,7 +524,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void call() {
+    public void call() {
         //DatabaseHelper databaseHelper = new DatabaseHelper(null);
         //String mara = DatabaseHelper.getInstance().getNumber("1");
         //System.out.println(mara);
