@@ -24,7 +24,7 @@ public class SavedLocation extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + Table_Name +"(ADDRESS TEXT, LATTITUDE TEXT, LONGITUDE TEXT )");
+        db.execSQL("create table " + Table_Name +"(ADDRESS TEXT PRIMARY KEY, LATTITUDE TEXT, LONGITUDE TEXT )");
     }
 
 
@@ -68,6 +68,31 @@ public class SavedLocation extends SQLiteOpenHelper {
     public Integer deleteData(String address){
         SQLiteDatabase db = this.getWritableDatabase() ;
         return db.delete(Table_Name,"ADDRESS = ?",new String[]{address});
+    }
+
+
+    public String findaddress(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res  = db.rawQuery("select ADDRESS from " + Table_Name,null);
+        String add = res.getString(0);
+        return add;
+    }
+    public String testLattitude(String address) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor res = db.rawQuery("select DISTINCT LATTITUDE from" + Table_Name + "WHERE group by ADDRESS = ?", new String[]{address});
+        String mara;
+
+        String textView = res.getString(1);
+        return textView;
+    }
+    public String testLongitude(String address) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select DISTINCT LONGITUDE from" + Table_Name + "WHERE GROUP BY ADDRESS = ?", new String[]{address});
+        String mara;
+
+        String textView = res.getString(2);
+        return textView;
     }
 
 }

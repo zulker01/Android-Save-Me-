@@ -10,20 +10,28 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.w3c.dom.Text;
+
 public class ShowSavedLocation extends AppCompatActivity {
     SavedLocation myDb;
-    EditText edit_Address, edit_Lattitude,edit_Longitude;
+
+    //MainActivity mainActivity;
+    EditText edit_Address, edit_Longitude,edit_Lattitude;
     Button addData;
     Button viewAll;
     Button deleteData;
 
+
     Button updateData;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_savedlocation);
         myDb = new SavedLocation(this);
-
+       // mainActivity = new MainActivity();
         edit_Address =(EditText) findViewById(R.id.address);
         edit_Lattitude = (EditText) findViewById(R.id.lattitude);
         edit_Longitude = (EditText) findViewById(R.id.longitude);
@@ -31,12 +39,17 @@ public class ShowSavedLocation extends AppCompatActivity {
         viewAll = (Button) findViewById(R.id.ViewData);
         updateData = (Button) findViewById(R.id.updateData);
         deleteData = (Button) findViewById(R.id.deleteData);
+        edit_Longitude.setText(this.getIntent().getExtras().getString("key2"));
+        edit_Lattitude.setText(this.getIntent().getExtras().getString("key1"));
         AddData();
         viewAll();
         UpdateData();
         DeleteData();
-    }
+       // mainActivity.getLocation();
+        //double lat = (double) mainActivity.lattitude;
+        //edit_Address.setText("");
 
+    }
 
     public void DeleteData(){
         deleteData.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +75,8 @@ public class ShowSavedLocation extends AppCompatActivity {
             public void onClick(View v) {
                 System.out.println("fuck");
 
+
+
                 boolean isUpdate = myDb.updateData(edit_Address.getText().toString(), edit_Lattitude.getText().toString(), edit_Longitude.getText().toString());
 
                 if(isUpdate == true){
@@ -70,10 +85,10 @@ public class ShowSavedLocation extends AppCompatActivity {
                 else{
                     Toast.makeText(ShowSavedLocation.this, " Data is not Updated",Toast.LENGTH_SHORT).show();
                 }
+                //MainActivity mainActivity = new MainActivity();
 
-                edit_Address.setText("");
-                edit_Longitude.setText("");
-                edit_Lattitude.setText("");
+               // EditText editText = (EditText) mainActivity.longitude;
+
             }
         });
     }
@@ -88,9 +103,6 @@ public class ShowSavedLocation extends AppCompatActivity {
                 else
                     Toast.makeText(ShowSavedLocation.this, " Data is not Inserted",Toast.LENGTH_SHORT).show();
 
-                edit_Address.setText("");
-                edit_Longitude.setText("");
-                edit_Lattitude.setText("");
 
             }
         });

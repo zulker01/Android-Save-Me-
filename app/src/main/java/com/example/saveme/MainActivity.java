@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -43,6 +44,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.material.navigation.NavigationView;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -74,6 +77,12 @@ public class MainActivity extends AppCompatActivity
     CardView messageButton;
     CardView voiceButton;
 
+    // calling
+    private static final int REQUEST_CALL = 1;
+
+    //messaging
+
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
 
     // danger notification
     public static int dangerCheckCounter = 0;
@@ -146,6 +155,8 @@ public class MainActivity extends AppCompatActivity
     ShowContactsActivity showContactsActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
 
         Log.d(TAG, "Connection mara ");
         AlarmManager alarmManager = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
@@ -332,33 +343,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-                    //sendMessage();
-                String phoneNumber="05373724";
-                String smsMessage = "I am in danger, HELP ! \n\n I am at " +
-                        "\n Latitude : "+latitude+"\nLongitude :  "+longitude+" \nLink : www.google.com/maps/place/"+latitude+","+longitude+getCompleteAddressString(latitude,longitude);
 
-                if(checkPermission(Manifest.permission.SEND_SMS)){
-                    SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(phoneNumber, null, smsMessage, null, null);
-                    Toast.makeText(MainActivity.this, "Message Sent!", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
-                }
 
-                                           /* done by mahodi :
-                                            Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
-                                                   Uri.parse("sms:"+phoneNumber));
-                                           smsIntent.putExtra("sms_body", smsMessage);
-                                           startActivity(smsIntent);
-
-                                           */
-
+                    sendMessage();
+               // DatabaseHelper databaseHelper = new DatabaseHelper(null);
+                //String mara = DatabaseHelper.getInstance().getNumber("1");
+                //System.out.println(mara);
 
                 }
-            public boolean checkPermission(String permission){
-                int check = ContextCompat.checkSelfPermission(MainActivity.this, permission);
-                return (check == PackageManager.PERMISSION_GRANTED);
-            }
+
 
 
         });
@@ -390,6 +383,21 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    public boolean TestSafe(){
+        SavedLocation savedLocation = new SavedLocation(null);
+        Cursor cursor = savedLocation.getAllData();
+        while(cursor.moveToNext()){
+            Double test1 = Double.valueOf(cursor.getString(1)).doubleValue();
+            Double test2 = Double.valueOf(cursor.getString(1)).doubleValue();
+
+            if(test1 == latitude && test2 == longitude)
+                return true;
+        }
+
+        return false;
+    }
+
+
     public void sendNotification()
     {
         Intent intent1 = new Intent(getApplicationContext(),NotificationReceiver.class);
@@ -418,7 +426,35 @@ public class MainActivity extends AppCompatActivity
 
     public void sendMessage()
     {
+        String phoneNumber="05373724";
+        String smsMessage = "I am in danger, HELP ! \n\n I am at " +
+                "\n Latitude : "+latitude+"\nLongitude :  "+longitude+" \nLink : www.google.com/maps/place/"+latitude+","+longitude+"\n"+getCompleteAddressString(latitude,longitude);
 
+        if(checkMessagePermission(Manifest.permission.SEND_SMS)){
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, smsMessage, null, null);
+            Toast.makeText(MainActivity.this, "Message Sent!", Toast.LENGTH_SHORT).show();
+        }else {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.SEND_SMS},MY_PERMISSIONS_REQUEST_SEND_SMS);
+            Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+        }
+
+                                           /* done by mahodi :
+                                            Intent smsIntent = new Intent(Intent.ACTION_SENDTO,
+                                                   Uri.parse("sms:"+phoneNumber));
+                                           smsIntent.putExtra("sms_body", smsMessage);
+                                           startActivity(smsIntent);
+
+                                           */
+
+
+    }
+
+
+    public boolean checkMessagePermission(String permission){
+        int check = ContextCompat.checkSelfPermission(MainActivity.this, permission);
+        return (check == PackageManager.PERMISSION_GRANTED);
     }
 
     @Override
@@ -467,9 +503,11 @@ public class MainActivity extends AppCompatActivity
             }
             case R.id.savedLocation: {
                 Toast.makeText(this, "hoise", Toast.LENGTH_SHORT).show();
-
+                //ShowSavedLocation showSavedLocation = new ShowSavedLocation(latitude,longitude);
+                getLocation();
                 Intent intent = new Intent(MainActivity.this, ShowSavedLocation.class);
-                intent.putExtra("pak",100);
+                intent.putExtra("key1",getLattitude());
+                intent.putExtra("key2",getLongitude());
                 startActivity(intent);
                 break;
             }
@@ -492,8 +530,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void call() {
-        String number="185373724";
+    public void call() {
+        //DatabaseHelper databaseHelper = new DatabaseHelper(null);
+        //String mara = DatabaseHelper.getInstance().getNumber("1");
+        //System.out.println(mara);
+        String number="01521255917";
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:"+number));
 
@@ -501,10 +542,14 @@ public class MainActivity extends AppCompatActivity
         {
             Toast menuToast = Toast.makeText(MainActivity.this,R.string.phonePermission, Toast.LENGTH_LONG);
             menuToast.show();
-            return ;
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+           // return ;
         }
-        startActivity(callIntent);
-    }
+        else {
+            startActivity(callIntent);
+        }
+        }
 /*
     private void sendMessage(){
         String number="01785373724";
@@ -550,7 +595,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void getLocation() {
+
+
+
+    public void getLocation() {
         try {
             if (canGetLocation) {
                 Log.d(TAG, "Can get location");
@@ -588,6 +636,17 @@ public class MainActivity extends AppCompatActivity
         } catch (SecurityException e) {
             e.printStackTrace();
         }
+     }
+
+     public String getLattitude(){
+        String s = Double.toString(latitude);
+        //Text lat = (Text) latitude;
+        return s;
+     }
+    public String getLongitude(){
+        String s = Double.toString(latitude);
+        //Text lat = (Text) latitude;
+        return s;
     }
 
     private void getLastLocation() {
@@ -631,6 +690,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
+           /* if (requestCode == REQUEST_CALL) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    call();
+                } else {
+                    Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
+                }
+
+            */
             case ALL_PERMISSIONS_RESULT:
                 Log.d(TAG, "onRequestPermissionsResult");
                 for (String perms : permissionsToRequest) {

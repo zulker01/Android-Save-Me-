@@ -44,6 +44,13 @@ public class NotificationReceiver extends AppCompatActivity {
 
     private Button mulai;
 
+    // calling
+    private static final int REQUEST_CALL = 1;
+
+    //messaging
+
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -95,10 +102,16 @@ public class NotificationReceiver extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(NotificationReceiver.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             Toast menuToast = Toast.makeText(NotificationReceiver.this, R.string.phonePermission, Toast.LENGTH_LONG);
             menuToast.show();
-            return;
+
+            ActivityCompat.requestPermissions(NotificationReceiver.this,
+                    new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+
         }
-        startActivity(callIntent);
-    }
+        else {
+            startActivity(callIntent);
+        }
+
+        }
 
     public void sendLoction() {
         String phoneNumber = "785373724";
@@ -108,7 +121,14 @@ public class NotificationReceiver extends AppCompatActivity {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, smsMessage, null, null);
             Toast.makeText(NotificationReceiver.this, "Message Sent!", Toast.LENGTH_SHORT).show();
+
         } else {
+
+        }else {
+            ActivityCompat.requestPermissions(NotificationReceiver.this,
+                    new String[]{Manifest.permission.SEND_SMS},MY_PERMISSIONS_REQUEST_SEND_SMS);
+
+
             Toast.makeText(NotificationReceiver.this, "Permission Denied", Toast.LENGTH_SHORT).show();
         }
     }
