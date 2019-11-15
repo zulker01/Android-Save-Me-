@@ -766,7 +766,7 @@ public class MainActivity extends AppCompatActivity
         longitude = loc.getLongitude();
         Log.d(TAG, latitude+" "+longitude);
         //tvTime.setText(DateFormat.getTimeInstance().format(loc.getTime()));
-        Toast.makeText(MainActivity.this, "location  Sent! "+latitude+" "+longitude, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "location  "+latitude+" "+longitude, Toast.LENGTH_SHORT).show();
     }
 
     @Override
