@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class ShowContactsActivity extends AppCompatActivity {
-    DatabaseHelper myDb;
+    //DatabaseHelper myDb;
     EditText edit_Name, edit_getId;
     EditText edit_Number;
     // EditText getEdit_Number
@@ -37,14 +37,16 @@ public class ShowContactsActivity extends AppCompatActivity {
 
         updateData = (Button) findViewById(R.id.btnupdateData);
         deleteData = (Button) findViewById(R.id.btndeleteData);
-        AddData();
+       /* AddData();
         viewAll();
         UpdateData();
         DeleteData();
 
+
+        */
     }
 
-
+/*
     public void DeleteData(){
         deleteData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,4 +133,6 @@ public class ShowContactsActivity extends AppCompatActivity {
         builder.setMessage(Message);
         builder.show();
     }
+
+ */
 }
