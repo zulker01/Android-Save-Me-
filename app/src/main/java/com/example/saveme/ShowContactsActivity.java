@@ -33,7 +33,7 @@ public class ShowContactsActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
 
     // define firebase object to save information
-    private  DatabaseReference databaseReference;
+    private  DatabaseReference datbaseReferenceofContacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class ShowContactsActivity extends AppCompatActivity {
 
         }
         FirebaseUser appUser = firebaseAuth.getCurrentUser();
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users/"+appUser.getUid()+"/Contacts");
+        datbaseReferenceofContacts = FirebaseDatabase.getInstance().getReference("Users/"+appUser.getUid()+"/Contacts");
 
 
         updateData = (Button) findViewById(R.id.btnupdateData);
@@ -94,10 +94,10 @@ public class ShowContactsActivity extends AppCompatActivity {
         String name = edit_Name.getText().toString();
         String phone = edit_Number.getText().toString();
 
-        String id = databaseReference.push().getKey();
+        String id = datbaseReferenceofContacts.push().getKey();
         Contacts  contact = new Contacts(id,name,phone);
         FirebaseUser appUser = firebaseAuth.getCurrentUser();
-        databaseReference.child(id).setValue(contact);
+        datbaseReferenceofContacts.child(id).setValue(contact);
 
         /*
         FirebaseDatabase.getInstance().getReference("Users/"+user.getUid())
