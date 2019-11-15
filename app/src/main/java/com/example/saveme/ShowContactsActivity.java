@@ -1,14 +1,23 @@
 package com.example.saveme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ShowContactsActivity extends AppCompatActivity {
     //DatabaseHelper myDb;
@@ -18,13 +27,19 @@ public class ShowContactsActivity extends AppCompatActivity {
     Button addData;
     Button viewAll;
     Button deleteData;
-
     Button updateData;
+
+    //defining firebaseauth object
+    private FirebaseAuth firebaseAuth;
+
+    // define firebase object to save information
+    private  DatabaseReference databaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_contacts);
-        myDb = new DatabaseHelper(this);
+        //myDb = new DatabaseHelper(this);
 
         edit_Name =(EditText) findViewById(R.id.editText2);
         edit_Number = (EditText) findViewById(R.id.editText3);
@@ -34,6 +49,20 @@ public class ShowContactsActivity extends AppCompatActivity {
 
        // addData();
        // viewAll();
+        // initialize firebase authentication object
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        /*
+        if the user is not logged in , prompt to log in
+        */
+        if(firebaseAuth.getCurrentUser() == null){
+            finish();
+            startActivity(new Intent(ShowContactsActivity.this,user_login.class));
+
+        }
+        FirebaseUser appUser = firebaseAuth.getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users/"+appUser.getUid()+"/Contacts");
+
 
         updateData = (Button) findViewById(R.id.btnupdateData);
         deleteData = (Button) findViewById(R.id.btndeleteData);
@@ -44,6 +73,49 @@ public class ShowContactsActivity extends AppCompatActivity {
 
 
         */
+
+       addData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                saveContacts();
+                // DatabaseHelper databaseHelper = new DatabaseHelper(null);
+                //String mara = DatabaseHelper.getInstance().getNumber("1");
+                //System.out.println(mara);
+
+            }
+
+
+
+        });
+    }
+
+    private void saveContacts(){
+        String name = edit_Name.getText().toString();
+        String phone = edit_Number.getText().toString();
+
+        String id = databaseReference.push().getKey();
+        Contacts  contact = new Contacts(id,name,phone);
+        FirebaseUser appUser = firebaseAuth.getCurrentUser();
+        databaseReference.child(id).setValue(contact);
+
+        /*
+        FirebaseDatabase.getInstance().getReference("Users/"+user.getUid())
+                .child("contacts")
+                .setValue(contact).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                // progressBar.setVisibility(View.GONE);
+                if (task.isSuccessful()) {
+                    Toast.makeText(ShowContactsActivity.this, "Contact Added ", Toast.LENGTH_LONG).show();
+                } else {
+                    //display a failure message
+                    Toast.makeText( ShowContactsActivity.this,"Contact Add Error", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+*/
+        //Toast.makeText(ShowContactsActivity.this," ",Toast.LENGTH_LONG).show();
     }
 
 /*
