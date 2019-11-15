@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity
     // getting date time
     private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-    public static double latitude = 0.00;
-    public  static  double longitude = 00.00;
+    public static double latitude = 23.7339937;
+    public  static  double longitude = 90.392784;
 
     // scheduling notification
 
@@ -424,10 +424,10 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    public void sendMessage()
-    {
-        String phoneNumber="05373724";
-        String smsMessage = "I am in danger, HELP ! \n\n I am at " +
+      public void sendMessage()
+        {
+            String phoneNumber="05373724";
+            String smsMessage = "I am in danger, HELP ! \n\n I am at " +
                 "\n Latitude : "+latitude+"\nLongitude :  "+longitude+" \nLink : www.google.com/maps/place/"+latitude+","+longitude+"\n"+getCompleteAddressString(latitude,longitude);
 
         if(checkMessagePermission(Manifest.permission.SEND_SMS)){

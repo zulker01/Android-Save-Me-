@@ -124,7 +124,7 @@ public class NotificationReceiver extends AppCompatActivity {
 
         } else {
 
-        }else {
+
             ActivityCompat.requestPermissions(NotificationReceiver.this,
                     new String[]{Manifest.permission.SEND_SMS},MY_PERMISSIONS_REQUEST_SEND_SMS);
 
