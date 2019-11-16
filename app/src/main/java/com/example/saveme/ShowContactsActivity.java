@@ -110,7 +110,7 @@ public class ShowContactsActivity extends AppCompatActivity {
            @Override
            public void onClick(View v) {
 
-               showMessage("Data",buffer.toString());
+               showMessage("Contacts",buffer.toString());
                // DatabaseHelper databaseHelper = new DatabaseHelper(null);
                //String mara = DatabaseHelper.getInstance().getNumber("1");
                //System.out.println(mara);
@@ -128,27 +128,7 @@ public class ShowContactsActivity extends AppCompatActivity {
         databaseReferenceofContactsShow.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //iterating through all the nodes
-               /* for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    //Contacts contactsAccess = postSnapshot.getValue(Contacts.class);
-                    String name = contactsAccess.getName();
-                    //String name = postSnapshot.child("Users/"+appUser.getUid()+"/Contacts/name").getValue(String.class);
-                    //String phone = postSnapshot.child("Users/"+appUser.getUid()+"/Contacts/phone").getValue(String.class);
 
-
-
-                    buffer.append("NAME : " +name+"\n");
-                    buffer.append("NUMBER : " + contactsAccess.phone+"\n\n");
-
-
-
-                       // buffer.append("NAME : " +name+"\n");
-                        //buffer.append("NUMBER : " + phone+"\n\n");
-
-                   // Log.d("contacts ", "NAME : " +contacts.name+"\n"+"NUMBER : " + contacts.phone+"\n\n");
-
-
-                }*/
               // currentUser = dataSnapshot.getValue(User.class);
                 userName = dataSnapshot.child("name").getValue().toString();
                 userEmail = dataSnapshot.child("email").getValue().toString();
@@ -167,12 +147,22 @@ public class ShowContactsActivity extends AppCompatActivity {
                 String userEmail = currentUser.email;
                 String userPhone = currentUser.phone;
   */
-                Toast.makeText( ShowContactsActivity.this,"Contact "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
-               // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
-                for(int i =0;i<contacts.size();i++) {
-                    buffer.append("NAME : " + contacts.get(i).first + "\n");
-                    buffer.append("NUMBER : " + contacts.get(i).second + "\n\n");
+                //Retrieve contacts
+                long d = dataSnapshot.child("contacts").getChildrenCount();
+                String contactName="";
+                String contactPhone="";
+                currentContacts.clear();
+                for(Integer i=0;i<d;i++)
+                {
+                   contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
+                    contactPhone = dataSnapshot.child("contacts").child(i.toString()).child("second").getValue(String.class);
+                    currentContacts.add(new Pair <String,String> (contactName, contactPhone));
+                    buffer.append("NAME : " + contactName + "\n");
+                    buffer.append("NUMBER : " + contactPhone + "\n\n");
                 }
+                Toast.makeText( ShowContactsActivity.this,"Contact "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
+               // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
+
             }
 
             @Override
@@ -185,21 +175,10 @@ public class ShowContactsActivity extends AppCompatActivity {
     private void saveContacts(){
         String name = edit_Name.getText().toString();
         String phone = edit_Number.getText().toString();
-        /*
-        String userName = appUser.getUid();
-        String id = databaseReferenceofContacts.push().getKey();
-        Contacts  contact = new Contacts(id,name,phone);
-        //FirebaseUser appUser = firebaseAuth.getCurrentUser();
-        //databaseReferenceofContacts.setValue(contact);
-        */
-        /*
-        String userName = currentUser.name;
-        String userEmail = currentUser.email;
-        String userPhone = currentUser.phone;
-*/
-        contacts.add(new Pair <String,String> (name, phone));
+
+        currentContacts.add(new Pair <String,String> (name, phone));
         User updateUser = new User(userName,userEmail,userPhone);
-        updateUser.setContacts(contacts);
+        updateUser.setContacts(currentContacts);
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(appUser.getUid())
                 .setValue(updateUser).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -218,87 +197,7 @@ public class ShowContactsActivity extends AppCompatActivity {
         //Toast.makeText(ShowContactsActivity.this," ",Toast.LENGTH_LONG).show();
     }
 
-/*
-    public void DeleteData(){
-        deleteData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Integer deleteRows = myDb.deleteData(edit_Number.getText().toString());
-                if(deleteRows >0)
-                    Toast.makeText(ShowContactsActivity.this, " Data deleted",Toast.LENGTH_SHORT).show();
-                else
 
-                    Toast.makeText(ShowContactsActivity.this, " Data is not deleted",Toast.LENGTH_SHORT).show();
-
-                edit_getId.setText("");
-                edit_Name.setText("");
-                edit_Number.setText("");
-
-            }
-        });
-    }
-
-    public void UpdateData(){
-        updateData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("fuck");
-
-                boolean isUpdate = myDb.updateData(edit_getId.getText().toString(), edit_Name.getText().toString(), edit_Number.getText().toString());
-
-                if(isUpdate == true){
-                    Toast.makeText(ShowContactsActivity.this, " Data Updated",Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(ShowContactsActivity.this, " Data is not Updated",Toast.LENGTH_SHORT).show();
-
-                }
-                edit_getId.setText("");
-                edit_Name.setText("");
-                edit_Number.setText("");
-            }
-        });
-    }
-
-    public void AddData(){
-        addData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isInserted = myDb.insertData(edit_Name.getText().toString(), edit_Number.getText().toString());
-                if(isInserted == true)
-                    Toast.makeText(ShowContactsActivity.this, " Data Inserted",Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(ShowContactsActivity.this, " Data is not Inserted",Toast.LENGTH_SHORT).show();
-
-                edit_getId.setText("");
-                edit_Name.setText("");
-                edit_Number.setText("");
-
-            }
-        });
-    }
-
-    public void viewAll(){
-        viewAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Cursor res = myDb.getAllData();
-                if(res.getCount() == 0) {
-                    showMessage("Error","Nothing found");
-                    return;
-                }
-
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID : " + res.getString(0)+"\n");
-                    buffer.append("NAME : " + res.getString(1)+"\n");
-                    buffer.append("NUMBER : " + res.getString(2)+"\n\n");
-
-                }showMessage("Data",buffer.toString());
-            }
-        });
-    }
-    */
 
     public void showMessage(String title, String Message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
