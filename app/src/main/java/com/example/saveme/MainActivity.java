@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity
     // scheduling notification
 
 
-  
+
     String  address,area,city,country,postalcode,fulladdress;
 
 
