@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +44,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
@@ -76,6 +81,27 @@ public class MainActivity extends AppCompatActivity
     CardView callButton;
     CardView messageButton;
     CardView voiceButton;
+
+    //firebase
+    //defining firebaseauth object
+    private FirebaseAuth firebaseAuth;
+    FirebaseUser appUser;
+    // define firebase object to save information
+    private DatabaseReference databaseReferenceofContacts;
+    private  DatabaseReference databaseReferenceLocations;
+    private  DatabaseReference databaseReferenceofContactsShow;
+    private ArrayList<Pair<String,String>> contacts = new ArrayList <Pair <String,String> > ();
+    private ArrayList<Pair<String,String>> currentContacts = new ArrayList <Pair <String,String> > ();
+    private ArrayList<Pair<String,Pair<String,String> > > location = new ArrayList<Pair<String,Pair<String,String> > >();
+    private StringBuffer buffer;
+    String userName ;
+    String userEmail ;
+    String userPhone ;
+    private  Integer retrieveDone = 0;
+    public long initialTimetoCheckDataFound = 1;
+    public long delayTimetoCheckDataFound = 3;
+
+    //firebase
 
     // calling
     private static final int REQUEST_CALL = 1;
@@ -165,7 +191,26 @@ public class MainActivity extends AppCompatActivity
         PendingIntent pendingIntent = PendingIntent.getService(MainActivity.this, 0, intent, 0);
         alarmManager.setRepeating(AlarmManager.RTC, when, (AlarmManager.INTERVAL_FIFTEEN_MINUTES / 60), pendingIntent);
 
+        //firebase
+        // initialize firebase authentication object
+        firebaseAuth = FirebaseAuth.getInstance();
 
+        /*
+        if the user is not logged in , prompt to log in
+        */
+        if(firebaseAuth.getCurrentUser() == null){
+            finish();
+            startActivity(new Intent(MainActivity.this,user_login.class));
+            Toast.makeText(MainActivity.this, "Please login first", Toast.LENGTH_SHORT).show();
+        }
+        appUser = firebaseAuth.getCurrentUser();
+        databaseReferenceLocations = FirebaseDatabase.getInstance().getReference("Users/"+appUser.getUid());
+
+        buffer = new StringBuffer();
+
+
+        ScheduledExecutorService schedulerToCheckDataFound = Executors.newSingleThreadScheduledExecutor();
+        //firebase
 
         /*
 
