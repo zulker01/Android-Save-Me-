@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,8 +18,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class ShowContactsActivity extends AppCompatActivity {
     //DatabaseHelper myDb;
@@ -31,9 +39,18 @@ public class ShowContactsActivity extends AppCompatActivity {
 
     //defining firebaseauth object
     private FirebaseAuth firebaseAuth;
-
+    FirebaseUser appUser;
     // define firebase object to save information
-    private  DatabaseReference datbaseReferenceofContacts;
+    private  DatabaseReference databaseReferenceofContacts;
+    private  DatabaseReference databaseReferenceofContactsShow;
+    private ArrayList<Pair<String,String>> contacts = new ArrayList <Pair <String,String> > ();
+    private ArrayList<Pair<String,String>> currentContacts = new ArrayList <Pair <String,String> > ();
+    private StringBuffer buffer;
+    private User currentUser;
+
+    String userName ;
+    String userEmail ;
+    String userPhone ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +77,11 @@ public class ShowContactsActivity extends AppCompatActivity {
             startActivity(new Intent(ShowContactsActivity.this,user_login.class));
 
         }
-        FirebaseUser appUser = firebaseAuth.getCurrentUser();
-        datbaseReferenceofContacts = FirebaseDatabase.getInstance().getReference("Users/"+appUser.getUid()+"/Contacts");
+        appUser = firebaseAuth.getCurrentUser();
+        databaseReferenceofContacts = FirebaseDatabase.getInstance().getReference("Users").child(appUser.getUid());
+        databaseReferenceofContactsShow = FirebaseDatabase.getInstance().getReference("Users").child(appUser.getUid());
 
-
+        buffer = new StringBuffer();
         updateData = (Button) findViewById(R.id.btnupdateData);
         deleteData = (Button) findViewById(R.id.btndeleteData);
        /* AddData();
@@ -88,21 +106,103 @@ public class ShowContactsActivity extends AppCompatActivity {
 
 
         });
+       viewAll.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+
+               showMessage("Data",buffer.toString());
+               // DatabaseHelper databaseHelper = new DatabaseHelper(null);
+               //String mara = DatabaseHelper.getInstance().getNumber("1");
+               //System.out.println(mara);
+
+           }
+
+
+
+       });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        databaseReferenceofContactsShow.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //iterating through all the nodes
+               /* for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //Contacts contactsAccess = postSnapshot.getValue(Contacts.class);
+                    String name = contactsAccess.getName();
+                    //String name = postSnapshot.child("Users/"+appUser.getUid()+"/Contacts/name").getValue(String.class);
+                    //String phone = postSnapshot.child("Users/"+appUser.getUid()+"/Contacts/phone").getValue(String.class);
+
+
+
+                    buffer.append("NAME : " +name+"\n");
+                    buffer.append("NUMBER : " + contactsAccess.phone+"\n\n");
+
+
+
+                       // buffer.append("NAME : " +name+"\n");
+                        //buffer.append("NUMBER : " + phone+"\n\n");
+
+                   // Log.d("contacts ", "NAME : " +contacts.name+"\n"+"NUMBER : " + contacts.phone+"\n\n");
+
+
+                }*/
+              // currentUser = dataSnapshot.getValue(User.class);
+                userName = dataSnapshot.child("name").getValue().toString();
+                userEmail = dataSnapshot.child("email").getValue().toString();
+                userPhone = dataSnapshot.child("phone").getValue().toString();
+
+                /*
+                GenericTypeIndicator<ArrayList<Item>> t = new GenericTypeIndicator<ArrayList<Item>>() {};
+                ArrayList<Item> yourStringArray = snapshot.getValue(t);
+                Toast.makeText(getContext(),yourStringArray.get(0).getName(),Toast.LENGTH_LONG).show();
+
+                 */
+                GenericTypeIndicator<ArrayList<Pair<String,String>>> t = new GenericTypeIndicator<ArrayList<Pair<String,String>>>() {};
+                //currentContacts = dataSnapshot.child("contacts").getValue(t);
+/*
+                String userName = currentUser.name;
+                String userEmail = currentUser.email;
+                String userPhone = currentUser.phone;
+  */
+                Toast.makeText( ShowContactsActivity.this,"Contact "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
+               // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
+                for(int i =0;i<contacts.size();i++) {
+                    buffer.append("NAME : " + contacts.get(i).first + "\n");
+                    buffer.append("NUMBER : " + contacts.get(i).second + "\n\n");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void saveContacts(){
         String name = edit_Name.getText().toString();
         String phone = edit_Number.getText().toString();
-
-        String id = datbaseReferenceofContacts.push().getKey();
-        Contacts  contact = new Contacts(id,name,phone);
-        FirebaseUser appUser = firebaseAuth.getCurrentUser();
-        datbaseReferenceofContacts.child(id).setValue(contact);
-
         /*
-        FirebaseDatabase.getInstance().getReference("Users/"+user.getUid())
-                .child("contacts")
-                .setValue(contact).addOnCompleteListener(new OnCompleteListener<Void>() {
+        String userName = appUser.getUid();
+        String id = databaseReferenceofContacts.push().getKey();
+        Contacts  contact = new Contacts(id,name,phone);
+        //FirebaseUser appUser = firebaseAuth.getCurrentUser();
+        //databaseReferenceofContacts.setValue(contact);
+        */
+        /*
+        String userName = currentUser.name;
+        String userEmail = currentUser.email;
+        String userPhone = currentUser.phone;
+*/
+        contacts.add(new Pair <String,String> (name, phone));
+        User updateUser = new User(userName,userEmail,userPhone);
+        updateUser.setContacts(contacts);
+        FirebaseDatabase.getInstance().getReference("Users")
+                .child(appUser.getUid())
+                .setValue(updateUser).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 // progressBar.setVisibility(View.GONE);
@@ -114,7 +214,7 @@ public class ShowContactsActivity extends AppCompatActivity {
                 }
             }
         });
-*/
+
         //Toast.makeText(ShowContactsActivity.this," ",Toast.LENGTH_LONG).show();
     }
 
@@ -198,6 +298,8 @@ public class ShowContactsActivity extends AppCompatActivity {
             }
         });
     }
+    */
+
     public void showMessage(String title, String Message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
@@ -206,5 +308,5 @@ public class ShowContactsActivity extends AppCompatActivity {
         builder.show();
     }
 
- */
+
 }
