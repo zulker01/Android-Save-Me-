@@ -1,7 +1,8 @@
 package com.example.saveme;
 
 public class User {
-    public String name, email, phone;
+    public String name, email, phone,userId;
+    public double lattitude, longitude;
 
     public User(){
 

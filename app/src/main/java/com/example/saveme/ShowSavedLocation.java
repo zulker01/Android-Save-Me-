@@ -1,5 +1,6 @@
 package com.example.saveme;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -10,13 +11,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.w3c.dom.Text;
 
 public class ShowSavedLocation extends AppCompatActivity {
-    SavedLocation myDb;
+    //SavedLocation myDb;
 
     //MainActivity mainActivity;
-    EditText edit_Address, edit_Longitude,edit_Lattitude;
+    EditText edit_Name, edit_Longitude,edit_Lattitude;
     Button addData;
     Button viewAll;
     Button deleteData;
@@ -24,15 +30,19 @@ public class ShowSavedLocation extends AppCompatActivity {
 
     Button updateData;
 
+    //defining firebaseauth object
+    private FirebaseAuth firebaseAuth;
 
+    // define firebase object to save information
+    private DatabaseReference datbaseReferenceofLocations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_savedlocation);
-        myDb = new SavedLocation(this);
+        //myDb = new SavedLocation(this);
        // mainActivity = new MainActivity();
-        edit_Address =(EditText) findViewById(R.id.address);
+        edit_Name =(EditText) findViewById(R.id.address);
         edit_Lattitude = (EditText) findViewById(R.id.lattitude);
         edit_Longitude = (EditText) findViewById(R.id.longitude);
         addData = (Button) findViewById(R.id.AddData);
@@ -41,16 +51,77 @@ public class ShowSavedLocation extends AppCompatActivity {
         deleteData = (Button) findViewById(R.id.deleteData);
         edit_Longitude.setText(this.getIntent().getExtras().getString("key2"));
         edit_Lattitude.setText(this.getIntent().getExtras().getString("key1"));
-        AddData();
+        /*AddData();
         viewAll();
         UpdateData();
         DeleteData();
        // mainActivity.getLocation();
         //double lat = (double) mainActivity.lattitude;
         //edit_Address.setText("");
+        */
+
+        // initialize firebase authentication object
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        /*
+        if the user is not logged in , prompt to log in
+        */
+        if(firebaseAuth.getCurrentUser() == null){
+            finish();
+            startActivity(new Intent(ShowSavedLocation.this,user_login.class));
+
+        }
+        FirebaseUser appUser = firebaseAuth.getCurrentUser();
+        datbaseReferenceofLocations = FirebaseDatabase.getInstance().getReference("Users/"+appUser.getUid()+"/Locations");
+
+        addData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                saveLocations();
+                // DatabaseHelper databaseHelper = new DatabaseHelper(null);
+                //String mara = DatabaseHelper.getInstance().getNumber("1");
+                //System.out.println(mara);
+
+            }
+
+
+
+        });
 
     }
 
+
+    private void saveLocations(){
+        String name = edit_Name.getText().toString();
+        String latitude = edit_Lattitude.getText().toString();
+        String longitude = edit_Longitude.getText().toString();
+
+        String id = datbaseReferenceofLocations.push().getKey();
+        Locations locations = new Locations(name,latitude,longitude);
+        FirebaseUser appUser = firebaseAuth.getCurrentUser();
+        datbaseReferenceofLocations.child(id).setValue(locations);
+
+        /*
+        FirebaseDatabase.getInstance().getReference("Users/"+user.getUid())
+                .child("contacts")
+                .setValue(contact).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                // progressBar.setVisibility(View.GONE);
+                if (task.isSuccessful()) {
+                    Toast.makeText(ShowContactsActivity.this, "Contact Added ", Toast.LENGTH_LONG).show();
+                } else {
+                    //display a failure message
+                    Toast.makeText( ShowContactsActivity.this,"Contact Add Error", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+*/
+        Toast.makeText(ShowSavedLocation.this," Location saved ",Toast.LENGTH_LONG).show();
+    }
+
+/*
     public void DeleteData(){
         deleteData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,4 +207,6 @@ public class ShowSavedLocation extends AppCompatActivity {
         builder.setMessage(Message);
         builder.show();
     }
+
+ */
 }
