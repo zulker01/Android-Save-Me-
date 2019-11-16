@@ -17,9 +17,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity android:name=".Recorder" />
+        <activity android:name=".NotificationReceiver" />
         <activity
-            android:name=".Istant"
-            android:label="EMERGENCY"
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleInstance"
+            android:taskAffinity=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,11 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Recorder" />
-        <activity android:name=".NotificationReceiver" />
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
+            android:name=".Istant"
+            android:label="EMERGENCY"
+            android:launchMode="singleInstance"
+            android:taskAffinity=".Istant"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

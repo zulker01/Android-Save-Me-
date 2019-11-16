@@ -52,6 +52,7 @@ public class ShowSavedLocation extends AppCompatActivity {
     private ArrayList<Pair<String,Pair<String,String> > > location = new ArrayList<Pair<String,Pair<String,String> > >();
     private StringBuffer buffer;
     private User currentUser;
+    private  Integer retrieveDone = 0;
 
     String userName ;
     String userEmail ;
@@ -100,7 +101,14 @@ public class ShowSavedLocation extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                saveLocations();
+                if(retrieveDone==1) {
+                    saveLocations();
+                }
+                else
+                {
+                    Toast.makeText( ShowSavedLocation.this,"Data Retrieving , Please wait ", Toast.LENGTH_LONG).show();
+                }
+
                 // DatabaseHelper databaseHelper = new DatabaseHelper(null);
                 //String mara = DatabaseHelper.getInstance().getNumber("1");
                 //System.out.println(mara);
@@ -114,7 +122,16 @@ public class ShowSavedLocation extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                showMessage("Locations",buffer.toString());
+
+                if(retrieveDone==1) {
+                    showMessage("Locations",buffer.toString());
+                }
+                else
+                {
+                    Toast.makeText( ShowSavedLocation.this,"Data Retrieving , Please wait ", Toast.LENGTH_LONG).show();
+                }
+
+
                 // DatabaseHelper databaseHelper = new DatabaseHelper(null);
                 //String mara = DatabaseHelper.getInstance().getNumber("1");
                 //System.out.println(mara);
@@ -158,7 +175,7 @@ public class ShowSavedLocation extends AppCompatActivity {
                 String contactPhone="";
                 currentContacts.clear();
 
-                
+
                 for(Integer i=0;i<d;i++)
                 {
                     contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
@@ -189,6 +206,7 @@ public class ShowSavedLocation extends AppCompatActivity {
                     buffer.append("Latitude : " + latitude + "\n");
                     buffer.append("Longitude : " + longitude + "\n\n");
                 }
+                retrieveDone =1;
                 Toast.makeText( ShowSavedLocation.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
 
             }
