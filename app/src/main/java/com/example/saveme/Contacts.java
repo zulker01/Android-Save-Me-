@@ -8,4 +8,12 @@ public class Contacts {
         this.name = name;
         this.phone = phone;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
