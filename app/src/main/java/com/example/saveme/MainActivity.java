@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity
     // getting date time
     private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-    public static double latitude = 23.7339937;
-    public  static  double longitude = 90.392784;
+    public static double latitude = 23.7287984;
+    public  static  double longitude = 90.3990832;
 
     // scheduling notification
 
