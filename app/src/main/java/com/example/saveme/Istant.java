@@ -51,6 +51,7 @@ public class Istant extends AppCompatActivity {
     String userName ;
     String userEmail ;
     String userPhone ;
+    String emergencyNum ="";
     private  Integer retrieveDone = 0;
     // calling
     private static final int REQUEST_CALL = 1;
@@ -87,7 +88,7 @@ public class Istant extends AppCompatActivity {
 
         final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-        retrieveData();
+        //retrieveData();
         /*while(true) {
             Log.d("hayre","ki kormu ami ");
             if (retrieveDone == 0) {
@@ -130,12 +131,12 @@ public class Istant extends AppCompatActivity {
             Log.d("hay ", topContact + " " + retrieveDone);
             //topContact = currentContacts.get(0).second;
             Log.d("hay ", topContact);
-        }
+        }*/
         String topContact = "hay";
         Log.d("hay ", topContact + " " + retrieveDone);
         //sendMessage("01234");
         //call("8765");
-*/
+
 
 
 
@@ -183,6 +184,7 @@ public class Istant extends AppCompatActivity {
         int check = ContextCompat.checkSelfPermission(Istant.this, permission);
         return (check == PackageManager.PERMISSION_GRANTED);
     }
+    /*
     public void retrieveData()
     {
         databaseReferenceLocations.addValueEventListener(new ValueEventListener() {
@@ -194,85 +196,7 @@ public class Istant extends AppCompatActivity {
                 userEmail = dataSnapshot.child("email").getValue().toString();
                 userPhone = dataSnapshot.child("phone").getValue().toString();
 
-                /*
-                GenericTypeIndicator<ArrayList<Item>> t = new GenericTypeIndicator<ArrayList<Item>>() {};
-                ArrayList<Item> yourStringArray = snapshot.getValue(t);
-                Toast.makeText(getContext(),yourStringArray.get(0).getName(),Toast.LENGTH_LONG).show();
-
-                 */
-                GenericTypeIndicator<ArrayList<Pair<String,String>>> t = new GenericTypeIndicator<ArrayList<Pair<String,String>>>() {};
-                //currentContacts = dataSnapshot.child("contacts").getValue(t);
-/*
-                String userName = currentUser.name;
-                String userEmail = currentUser.email;
-                String userPhone = currentUser.phone;
-  */
-                //Retrieve contacts
-                long d = dataSnapshot.child("contacts").getChildrenCount();
-                String contactName="";
-                String contactPhone="";
-                currentContacts.clear();
-
-
-                for(Integer i=0;i<d;i++)
-                {
-                    contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
-                    contactPhone = dataSnapshot.child("contacts").child(i.toString()).child("second").getValue(String.class);
-                    currentContacts.add(new Pair <String,String> (contactName, contactPhone));
-
-                }
-                Toast.makeText( Istant.this,"Contact "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_SHORT).show();
-                // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
-
-                // retrieve locations
-                long locationCount = dataSnapshot.child("location").getChildrenCount();
-                String locationName="";
-                String latitude="";
-                String longitude="";
-
-                location.clear();
-                if(buffer.length()>0) {
-                    buffer.delete(0, buffer.length() - 1);
-                }
-                for(Integer i=0;i<locationCount;i++)
-                {
-                    locationName = dataSnapshot.child("location").child(i.toString()).child("first").getValue(String.class);
-                    latitude = dataSnapshot.child("location").child(i.toString()).child("second").child("first").getValue(String.class);
-                    longitude = dataSnapshot.child("location").child(i.toString()).child("second").child("second").getValue(String.class);
-                    location.add(new Pair<String, Pair<String, String>>(locationName,(new Pair<String, String>(latitude,longitude))));
-                    buffer.append("NAME : " + locationName + "\n");
-                    buffer.append("Latitude : " + latitude + "\n");
-                    buffer.append("Longitude : " + longitude + "\n\n");
-                }
-                retrieveDone = 1;
-                Toast.makeText( Istant.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-/*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        databaseReferenceLocations.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                // currentUser = dataSnapshot.getValue(User.class);
-                userName = dataSnapshot.child("name").getValue().toString();
-                userEmail = dataSnapshot.child("email").getValue().toString();
-                userPhone = dataSnapshot.child("phone").getValue().toString();
-
-
-                GenericTypeIndicator<ArrayList<Pair<String,String>>> t = new GenericTypeIndicator<ArrayList<Pair<String,String>>>() {};
-                //currentContacts = dataSnapshot.child("contacts").getValue(t);
-
-                //Retrieve contacts
+                   //Retrieve contacts
                 long d = dataSnapshot.child("contacts").getChildrenCount();
                 String contactName="";
                 String contactPhone="";
@@ -321,5 +245,76 @@ public class Istant extends AppCompatActivity {
         });
     }
 */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        databaseReferenceLocations.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                // currentUser = dataSnapshot.getValue(User.class);
+                userName = dataSnapshot.child("name").getValue().toString();
+                userEmail = dataSnapshot.child("email").getValue().toString();
+                userPhone = dataSnapshot.child("phone").getValue().toString();
+
+
+                GenericTypeIndicator<ArrayList<Pair<String,String>>> t = new GenericTypeIndicator<ArrayList<Pair<String,String>>>() {};
+                //currentContacts = dataSnapshot.child("contacts").getValue(t);
+
+                //Retrieve contacts
+                long d = dataSnapshot.child("contacts").getChildrenCount();
+                String contactName="";
+                String contactPhone="";
+                currentContacts.clear();
+
+
+                for(Integer i=0;i<d;i++)
+                {
+                    contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
+                    contactPhone = dataSnapshot.child("contacts").child(i.toString()).child("second").getValue(String.class);
+                    currentContacts.add(new Pair <String,String> (contactName, contactPhone));
+                    break;
+
+                }
+                emergencyNum = contactPhone;
+                call(emergencyNum);
+                sendMessage(emergencyNum);
+                Toast.makeText( Istant.this,"Contact "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_SHORT).show();
+                // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
+                /*
+                // retrieve locations
+                long locationCount = dataSnapshot.child("location").getChildrenCount();
+                String locationName="";
+                String latitude="";
+                String longitude="";
+
+                location.clear();
+                if(buffer.length()>0) {
+                    buffer.delete(0, buffer.length() - 1);
+                }
+                for(Integer i=0;i<locationCount;i++)
+                {
+                    locationName = dataSnapshot.child("location").child(i.toString()).child("first").getValue(String.class);
+                    latitude = dataSnapshot.child("location").child(i.toString()).child("second").child("first").getValue(String.class);
+                    longitude = dataSnapshot.child("location").child(i.toString()).child("second").child("second").getValue(String.class);
+                    location.add(new Pair<String, Pair<String, String>>(locationName,(new Pair<String, String>(latitude,longitude))));
+                    buffer.append("NAME : " + locationName + "\n");
+                    buffer.append("Latitude : " + latitude + "\n");
+                    buffer.append("Longitude : " + longitude + "\n\n");
+                }
+
+                 */
+                retrieveDone = 1;
+              //  Toast.makeText( Istant.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
     }

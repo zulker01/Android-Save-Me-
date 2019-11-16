@@ -46,8 +46,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -100,7 +104,7 @@ public class MainActivity extends AppCompatActivity
     private  Integer retrieveDone = 0;
     public long initialTimetoCheckDataFound = 1;
     public long delayTimetoCheckDataFound = 3;
-
+    String emergencyNum="";
     //firebase
 
     // calling
@@ -345,12 +349,7 @@ public class MainActivity extends AppCompatActivity
         messageButton=findViewById(R.id.messageButton);
 
 
-        callButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 call();
-            }
-        });
+
 
         //location
 
@@ -383,14 +382,27 @@ public class MainActivity extends AppCompatActivity
         }
         //location
 
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(emergencyNum.equals("")){
+                    Toast.makeText(MainActivity.this, "Can't call now, Make sure you have saved a valid number. Or try again later", Toast.LENGTH_SHORT).show();
+                }
+                else
+                    call(emergencyNum);
+            }
+        });
 
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-
-                    sendMessage();
+                    if(emergencyNum.equals("")){
+                        Toast.makeText(MainActivity.this, "Can't message now, Make sure you have saved a valid number. Or try again later", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                        sendMessage(emergencyNum);
                // DatabaseHelper databaseHelper = new DatabaseHelper(null);
                 //String mara = DatabaseHelper.getInstance().getNumber("1");
                 //System.out.println(mara);
@@ -469,9 +481,9 @@ public class MainActivity extends AppCompatActivity
 
 
 
-      public void sendMessage()
+      public void sendMessage(String phoneNumber)
         {
-            String phoneNumber="05373724";
+
             String smsMessage = "I am in danger, HELP ! \n\n I am at " +
                 "\n Latitude : "+latitude+"\nLongitude :  "+longitude+" \nLink : www.google.com/maps/place/"+latitude+","+longitude+"\n"+getCompleteAddressString(latitude,longitude);
 
@@ -575,11 +587,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void call() {
+    public void call(String number) {
         //DatabaseHelper databaseHelper = new DatabaseHelper(null);
         //String mara = DatabaseHelper.getInstance().getNumber("1");
         //System.out.println(mara);
-        String number="01521255917";
+
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:"+number));
 
@@ -864,6 +876,78 @@ public class MainActivity extends AppCompatActivity
     //location
 
 
+    //firebase
+    @Override
+    protected void onStart() {
+        super.onStart();
+        databaseReferenceLocations.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                // currentUser = dataSnapshot.getValue(User.class);
+                userName = dataSnapshot.child("name").getValue().toString();
+                userEmail = dataSnapshot.child("email").getValue().toString();
+                userPhone = dataSnapshot.child("phone").getValue().toString();
+
+
+                GenericTypeIndicator<ArrayList<Pair<String,String>>> t = new GenericTypeIndicator<ArrayList<Pair<String,String>>>() {};
+                //currentContacts = dataSnapshot.child("contacts").getValue(t);
+
+                //Retrieve contacts
+                long d = dataSnapshot.child("contacts").getChildrenCount();
+                String contactName="";
+                String contactPhone="";
+                currentContacts.clear();
+
+
+                for(Integer i=0;i<d;i++)
+                {
+                    contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
+                    contactPhone = dataSnapshot.child("contacts").child(i.toString()).child("second").getValue(String.class);
+                    currentContacts.add(new Pair <String,String> (contactName, contactPhone));
+                    break;
+
+
+                }
+                emergencyNum = contactPhone;
+
+                Toast.makeText( MainActivity.this,"Contact emer"+emergencyNum+" "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_SHORT).show();
+                // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
+                /*
+                // retrieve locations
+                long locationCount = dataSnapshot.child("location").getChildrenCount();
+                String locationName="";
+                String latitude="";
+                String longitude="";
+
+                location.clear();
+                if(buffer.length()>0) {
+                    buffer.delete(0, buffer.length() - 1);
+                }
+                for(Integer i=0;i<locationCount;i++)
+                {
+                    locationName = dataSnapshot.child("location").child(i.toString()).child("first").getValue(String.class);
+                    latitude = dataSnapshot.child("location").child(i.toString()).child("second").child("first").getValue(String.class);
+                    longitude = dataSnapshot.child("location").child(i.toString()).child("second").child("second").getValue(String.class);
+                    location.add(new Pair<String, Pair<String, String>>(locationName,(new Pair<String, String>(latitude,longitude))));
+                    buffer.append("NAME : " + locationName + "\n");
+                    buffer.append("Latitude : " + latitude + "\n");
+                    buffer.append("Longitude : " + longitude + "\n\n");
+                }
+
+                 */
+                retrieveDone = 1;
+                //  Toast.makeText( Istant.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    //firebase
 }
 
 
