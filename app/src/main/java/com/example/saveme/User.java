@@ -7,9 +7,9 @@ import java.util.ArrayList;
 public class User {
     public String name, email, phone,userId;
     public ArrayList<Pair<String,String>> contacts;
-    public ArrayList<Pair<String,String>> location;
+    public ArrayList<Pair<String,Pair<String,String> > > location;
 
-    public void setLocation(ArrayList<Pair<String, String>> location) {
+    public void setLocation(ArrayList<Pair<String,Pair<String,String> > > location) {
         this.location = location;
     }
 

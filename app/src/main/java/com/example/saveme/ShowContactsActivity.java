@@ -45,8 +45,10 @@ public class ShowContactsActivity extends AppCompatActivity {
     private  DatabaseReference databaseReferenceofContactsShow;
     private ArrayList<Pair<String,String>> contacts = new ArrayList <Pair <String,String> > ();
     private ArrayList<Pair<String,String>> currentContacts = new ArrayList <Pair <String,String> > ();
+    private ArrayList<Pair<String,Pair<String,String> > > location = new ArrayList<Pair<String,Pair<String,String> > >();
     private StringBuffer buffer;
     private User currentUser;
+    private  Integer retrieveDone = 0;
 
     String userName ;
     String userEmail ;
@@ -96,11 +98,13 @@ public class ShowContactsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                saveContacts();
-                // DatabaseHelper databaseHelper = new DatabaseHelper(null);
-                //String mara = DatabaseHelper.getInstance().getNumber("1");
-                //System.out.println(mara);
-
+                if(retrieveDone==1) {
+                    saveContacts();
+                }
+                else
+                {
+                    Toast.makeText( ShowContactsActivity.this,"Data Retrieving , Please wait ", Toast.LENGTH_LONG).show();
+                }
             }
 
 
@@ -110,10 +114,14 @@ public class ShowContactsActivity extends AppCompatActivity {
            @Override
            public void onClick(View v) {
 
-               showMessage("Contacts",buffer.toString());
-               // DatabaseHelper databaseHelper = new DatabaseHelper(null);
-               //String mara = DatabaseHelper.getInstance().getNumber("1");
-               //System.out.println(mara);
+               if(retrieveDone==1) {
+                   showMessage("Contacts",buffer.toString());
+               }
+               else
+               {
+                   Toast.makeText( ShowContactsActivity.this,"Data Retrieving , Please wait ", Toast.LENGTH_LONG).show();
+               }
+
 
            }
 
@@ -152,6 +160,9 @@ public class ShowContactsActivity extends AppCompatActivity {
                 String contactName="";
                 String contactPhone="";
                 currentContacts.clear();
+                if(buffer.length()>0) {
+                    buffer.delete(0, buffer.length() - 1);
+                }
                 for(Integer i=0;i<d;i++)
                 {
                    contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
@@ -162,6 +173,25 @@ public class ShowContactsActivity extends AppCompatActivity {
                 }
                 Toast.makeText( ShowContactsActivity.this,"Contact "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
                // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
+
+                // retrieve locations
+                long locationCount = dataSnapshot.child("location").getChildrenCount();
+                String locationName="";
+                String latitude="";
+                String longitude="";
+
+                location.clear();
+
+                for(Integer i=0;i<locationCount;i++)
+                {
+                    locationName = dataSnapshot.child("location").child(i.toString()).child("first").getValue(String.class);
+                    latitude = dataSnapshot.child("location").child(i.toString()).child("second").child("first").getValue(String.class);
+                    longitude = dataSnapshot.child("location").child(i.toString()).child("second").child("second").getValue(String.class);
+                    location.add(new Pair<String, Pair<String, String>>(locationName,(new Pair<String, String>(latitude,longitude))));
+
+                }
+                retrieveDone =1;
+                Toast.makeText( ShowContactsActivity.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
 
             }
 
@@ -179,6 +209,7 @@ public class ShowContactsActivity extends AppCompatActivity {
         currentContacts.add(new Pair <String,String> (name, phone));
         User updateUser = new User(userName,userEmail,userPhone);
         updateUser.setContacts(currentContacts);
+        updateUser.setLocation(location);
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(appUser.getUid())
                 .setValue(updateUser).addOnCompleteListener(new OnCompleteListener<Void>() {
