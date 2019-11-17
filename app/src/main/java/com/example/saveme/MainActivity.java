@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity
     CardView callButton;
     CardView messageButton;
     CardView voiceButton;
-    //Button login = findViewById(R.id.nav_login);
+    //MenuItem login = findR.id.nav_login;
     //firebase
     //defining firebaseauth object
     private FirebaseAuth firebaseAuth;
@@ -601,6 +601,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.nav_login: {
                 Toast.makeText(this, "hoise", Toast.LENGTH_SHORT).show();
+
 
                 Intent intent = new Intent(MainActivity.this, user_login.class);
                 intent.putExtra("pak",100);
