@@ -15,4 +15,37 @@
         android:textColor="#052EAF"
         ></TextView>
 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/record"
+        android:text="Record"
+        ></Button>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/stop"
+        android:text="Stop"
+        android:layout_toEndOf="@+id/record"
+        ></Button>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/play"
+        android:text="Play"
+        android:layout_below="@+id/record"
+        ></Button>
+
+    <Button
+        android:id="@+id/playstop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/stop"
+        android:layout_toEndOf="@+id/play"
+        android:text="Stop"></Button>
+
+
 </RelativeLayout>
