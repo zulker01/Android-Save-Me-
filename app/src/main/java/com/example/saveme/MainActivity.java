@@ -27,6 +27,7 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity
     CardView callButton;
     CardView messageButton;
     CardView voiceButton;
-
+    //Button login = findViewById(R.id.nav_login);
     //firebase
     //defining firebaseauth object
     private FirebaseAuth firebaseAuth;
@@ -102,8 +103,7 @@ public class MainActivity extends AppCompatActivity
     String userEmail ;
     String userPhone ;
     private  Integer retrieveDone = 0;
-    public long initialTimetoCheckDataFound = 1;
-    public long delayTimetoCheckDataFound = 3;
+
     String emergencyNum="";
     //firebase
 
@@ -162,8 +162,8 @@ public class MainActivity extends AppCompatActivity
 
     //scheduling notification
 
-    public long initialTimetoCheckLocation = 60;
-    public long delayTimetoCheckLocation = 2*60;
+    public long initialTimetoCheckLocation = 1;
+    public long delayTimetoCheckLocation = 1;
     // location
 
     final String TAG = "GPS";
@@ -207,13 +207,16 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this,user_login.class));
             Toast.makeText(MainActivity.this, "Please login first", Toast.LENGTH_SHORT).show();
         }
+        else {
+           // login.setText("Log Out ");
+        }
         appUser = firebaseAuth.getCurrentUser();
         databaseReferenceLocations = FirebaseDatabase.getInstance().getReference("Users/"+appUser.getUid());
 
         buffer = new StringBuffer();
 
 
-        ScheduledExecutorService schedulerToCheckDataFound = Executors.newSingleThreadScheduledExecutor();
+
         //firebase
 
         /*
@@ -297,29 +300,32 @@ public class MainActivity extends AppCompatActivity
         //Toast.makeText(MainActivity.this,sdf.format(cal.getTime())+" "+ milliSec1,Toast.LENGTH_LONG).show();
 
             // this will send notification  after every 3 seconds
+        Toast.makeText(MainActivity.this," it is here",Toast.LENGTH_SHORT).show();
             scheduler.scheduleWithFixedDelay(new Runnable() {
                 @Override
                 public void run() {
                    // sendNotification();
                     //here the function will check if current location is a safe location saved prevoiusly
-                    /*
-                    if( latitude = safe latitude && longitude =  safe longitude )
-                            do nothing ;
+                    //sendNotificationOfLocation();
+                    Toast.makeText(MainActivity.this," it is here 2",Toast.LENGTH_SHORT).show();
+                    if( TestSafe() ) {
+                    }
                     else
                     {
                         dangerCheckCounter ++;
                     }
 
-                    if(dangerCheckCounter == 6 )  : if we assume the app will check location in every 30 minutes,
-                                                    then it will send notification after 3 hours , checkning if he is safe
-                     */
+                    //  // if we assume the app will check location in every 30 minutes,
+                                                   // then it will send notification after 3 hours , checkning if he is safe
+
 
                     if(dangerCheckCounter > 5)
                     {
-                        sendNotification();
+                        sendNotificationOfLocation();
+                        Toast.makeText(MainActivity.this,"You are not is saved place",Toast.LENGTH_LONG).show();
                     }
                 }
-            }, initialTimetoCheckLocation, delayTimetoCheckLocation, SECONDS);
+            }, 1,1, SECONDS);
             int b=0;
             if(b==0)
             {
@@ -441,19 +447,42 @@ public class MainActivity extends AppCompatActivity
 
 
     public boolean TestSafe(){
-        SavedLocation savedLocation = new SavedLocation(null);
-        Cursor cursor = savedLocation.getAllData();
-        while(cursor.moveToNext()){
-            Double test1 = Double.valueOf(cursor.getString(1)).doubleValue();
-            Double test2 = Double.valueOf(cursor.getString(1)).doubleValue();
 
-            if(test1 == latitude && test2 == longitude)
+        for(int i=0;i<location.size();i++)
+        {
+            String testLatitude = location.get(i).second.first;
+            String testLongitude = location.get(i).second.first;
+
+            if(testLatitude.equals(Double.toString(latitude)) && testLongitude.equals(Double.toString(longitude)))
                 return true;
         }
 
+        Toast.makeText(MainActivity.this,"retunnin false",Toast.LENGTH_LONG);
         return false;
     }
 
+    public void sendNotificationOfLocation()
+    {
+        Intent intent1 = new Intent(getApplicationContext(),NotificationReceiver.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder b = new NotificationCompat.Builder(getApplicationContext());
+
+        b.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.ic_notification)
+                .setTicker("Hearty365")
+                .setContentTitle("Are you here intentionally ?")
+                .setContentText("If not Tap Here")
+                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
+                .setContentIntent(contentIntent)
+                .setContentInfo("Info");
+
+
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, b.build());
+    }
 
     public void sendNotification()
     {
@@ -913,7 +942,7 @@ public class MainActivity extends AppCompatActivity
 
                 Toast.makeText( MainActivity.this,"Contact emer"+emergencyNum+" "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_SHORT).show();
                 // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
-                /*
+
                 // retrieve locations
                 long locationCount = dataSnapshot.child("location").getChildrenCount();
                 String locationName="";
@@ -935,7 +964,7 @@ public class MainActivity extends AppCompatActivity
                     buffer.append("Longitude : " + longitude + "\n\n");
                 }
 
-                 */
+
                 retrieveDone = 1;
                 //  Toast.makeText( Istant.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
 

@@ -46,7 +46,7 @@ public class logged_in extends AppCompatActivity implements View.OnClickListener
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
 
         //displaying logged in user name
-        textViewUserEmail.setText("Welcome " + user.getEmail());
+        textViewUserEmail.setText("Welcome ");
 
         //adding listener to button
         buttonLogout.setOnClickListener(this);
