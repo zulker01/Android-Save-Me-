@@ -222,7 +222,9 @@ public class ShowSavedLocation extends AppCompatActivity {
         String name = edit_Name.getText().toString();
         String latitude = edit_Lattitude.getText().toString();
         String longitude = edit_Longitude.getText().toString();
-
+        edit_Lattitude.setText("");
+        edit_Longitude.setText("");
+        edit_Name.setText("");
         location.add(new Pair<String, Pair<String, String>>(name,(new Pair<String, String>(latitude,longitude))));
         User updateUser = new User(userName,userEmail,userPhone);
         updateUser.setContacts(currentContacts);

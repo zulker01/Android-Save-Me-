@@ -205,7 +205,9 @@ public class ShowContactsActivity extends AppCompatActivity {
     private void saveContacts(){
         String name = edit_Name.getText().toString();
         String phone = edit_Number.getText().toString();
-
+        edit_getId.setText("");
+        edit_Name.setText("");
+        edit_Number.setText("");
         currentContacts.add(new Pair <String,String> (name, phone));
         User updateUser = new User(userName,userEmail,userPhone);
         updateUser.setContacts(currentContacts);

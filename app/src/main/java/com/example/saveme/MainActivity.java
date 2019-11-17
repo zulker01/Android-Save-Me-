@@ -27,6 +27,7 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity
     CardView callButton;
     CardView messageButton;
     CardView voiceButton;
-
+    //Button login = findViewById(R.id.nav_login);
     //firebase
     //defining firebaseauth object
     private FirebaseAuth firebaseAuth;
@@ -205,6 +206,9 @@ public class MainActivity extends AppCompatActivity
             finish();
             startActivity(new Intent(MainActivity.this,user_login.class));
             Toast.makeText(MainActivity.this, "Please login first", Toast.LENGTH_SHORT).show();
+        }
+        else {
+           // login.setText("Log Out ");
         }
         appUser = firebaseAuth.getCurrentUser();
         databaseReferenceLocations = FirebaseDatabase.getInstance().getReference("Users/"+appUser.getUid());
