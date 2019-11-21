@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".settings"
+    android:orientation="vertical">
+
+
+        <Switch
+            android:id="@+id/simpleSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Allow checking if staying in unknown place"
+            android:textSize="30dp"
+            android:checked="false"/>
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="121dp"
+            android:layout_height="49dp"
+            android:text="Submit"
+
+            android:layout_margin="100dp"
+            android:padding="10dp"/>
+
+
+
+
+</LinearLayout>

@@ -10,38 +10,34 @@
     <EditText
         android:id="@+id/address"
         android:layout_width="293dp"
-        android:layout_height="66dp"
+        android:layout_height="56dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="address"
-        tools:layout_editor_absoluteX="47dp"
-        tools:layout_editor_absoluteY="76dp"
-        android:layout_margin="30dp"
-        android:padding="15dp"/>
+        
+        android:layout_margin="20dp"
+        android:padding="10dp"/>
 
     <EditText
         android:id="@+id/lattitude"
         android:layout_width="293dp"
-        android:layout_height="76dp"
+        android:layout_height="56dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="lattitude"
-        tools:layout_editor_absoluteX="47dp"
-        tools:layout_editor_absoluteY="186dp"
-        android:layout_margin="30dp"
-        android:padding="15dp"/>
+
+        android:layout_margin="20dp"
+        android:padding="10dp"/>
 
     <EditText
         android:id="@+id/longitude"
         android:layout_width="285dp"
-        android:layout_height="71dp"
+        android:layout_height="56dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="longitude"
-        tools:layout_editor_absoluteX="47dp"
-        tools:layout_editor_absoluteY="307dp"
-        android:layout_margin="30dp"
-        android:padding="15dp"/>
+        android:layout_margin="20dp"
+        android:padding="10dp"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -50,41 +46,27 @@
             android:layout_width="121dp"
             android:layout_height="49dp"
             android:text="Submit"
-            tools:layout_editor_absoluteX="55dp"
-            tools:layout_editor_absoluteY="430dp"
-            android:layout_margin="30dp"
-            android:padding="15dp"/>
+
+            android:layout_margin="20dp"
+            android:padding="10dp"/>
 
         <Button
             android:id="@+id/ViewData"
             android:layout_width="121dp"
             android:layout_height="49dp"
             android:text="ViewAll"
-            tools:layout_editor_absoluteX="55dp"
-            tools:layout_editor_absoluteY="430dp"
-            android:layout_margin="30dp"
-            android:padding="15dp"/>  </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/updateData"
-            android:layout_width="121dp"
-            android:layout_height="49dp"
-            android:text="Update"
-            tools:layout_editor_absoluteX="55dp"
-            tools:layout_editor_absoluteY="430dp"
-            android:layout_margin="30dp"
-            android:padding="15dp"/>
+            android:layout_margin="20dp"
+            android:padding="10dp"/>  </LinearLayout>
+
         <Button
             android:id="@+id/deleteData"
             android:layout_width="121dp"
             android:layout_height="49dp"
             android:text="Delete"
             tools:layout_editor_absoluteX="55dp"
-            tools:layout_editor_absoluteY="430dp"
-            android:layout_margin="30dp"
-            android:padding="15dp"/>  </LinearLayout>
+            tools:layout_editor_absoluteY="420dp"
+            android:layout_margin="20dp"
+            android:padding="10dp"/>
 
 
 </LinearLayout>

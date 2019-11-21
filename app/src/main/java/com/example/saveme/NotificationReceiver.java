@@ -103,25 +103,6 @@ public class NotificationReceiver extends AppCompatActivity {
         MainActivity.makezero();
         sendNotification();
 
-      /* try {
-           start();
-        } catch (IOException e) {
-            //e.printStackTrace();
-        }
-
-
-        Button stop = (Button) findViewById(R.id.btnstop);
-
-        stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                }
-            }
-        });
-
-       */
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_receiver);
 
@@ -153,9 +134,6 @@ public class NotificationReceiver extends AppCompatActivity {
         }
     }
     public void call(String number) {
-        //DatabaseHelper databaseHelper = new DatabaseHelper(null);
-        //String mara = DatabaseHelper.getInstance().getNumber("1");
-        //System.out.println(mara);
 
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:"+number));
@@ -260,33 +238,6 @@ public class NotificationReceiver extends AppCompatActivity {
                 emergencyNum = contactPhone;
                 call(emergencyNum);
                 sendMessage(emergencyNum);
-                Toast.makeText( NotificationReceiver.this,"Contact "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_SHORT).show();
-                // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
-                /*
-                // retrieve locations
-                long locationCount = dataSnapshot.child("location").getChildrenCount();
-                String locationName="";
-                String latitude="";
-                String longitude="";
-
-                location.clear();
-                if(buffer.length()>0) {
-                    buffer.delete(0, buffer.length() - 1);
-                }
-                for(Integer i=0;i<locationCount;i++)
-                {
-                    locationName = dataSnapshot.child("location").child(i.toString()).child("first").getValue(String.class);
-                    latitude = dataSnapshot.child("location").child(i.toString()).child("second").child("first").getValue(String.class);
-                    longitude = dataSnapshot.child("location").child(i.toString()).child("second").child("second").getValue(String.class);
-                    location.add(new Pair<String, Pair<String, String>>(locationName,(new Pair<String, String>(latitude,longitude))));
-                    buffer.append("NAME : " + locationName + "\n");
-                    buffer.append("Latitude : " + latitude + "\n");
-                    buffer.append("Longitude : " + longitude + "\n\n");
-                }
-
-                 */
-                retrieveDone = 1;
-                //  Toast.makeText( NotificationReceiver.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
 
             }
 
@@ -298,175 +249,3 @@ public class NotificationReceiver extends AppCompatActivity {
     }
 }
 
-
-    /*final static MediaRecorder recorder = new MediaRecorder();
-    public static  String path;
-
-    public NotificationReceiver(String path) {
-        this.path = sanitizePath(path);
-    }
-
-    public static String sanitizePath(String path) {
-        if (!path.startsWith("/")) {
-            path = "/" + path;
-        }
-        if (!path.contains(".")) {
-            path += ".3gp";
-        }
-        return Environment.getExternalStorageDirectory().getAbsolutePath()
-                + path;
-    }
-
-    public static void start() throws IOException {
-        String state = android.os.Environment.getExternalStorageState();
-        if (!state.equals(android.os.Environment.MEDIA_MOUNTED)) {
-            throw new IOException("SD Card is not mounted.  It is " + state
-                    + ".");
-        }
-
-        // make sure the directory we plan to store the recording in exists
-        File directory = new File(path).getParentFile();
-        if (!directory.exists() && !directory.mkdirs()) {
-            throw new IOException("Path to file could not be created.");
-        }
-
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        recorder.setOutputFile(path);
-        recorder.prepare();
-        recorder.start();
-    }
-
-    public static void stop() throws IOException {
-        recorder.stop();
-        recorder.release();
-    }
-
-    public static void playarcoding(String path) throws IOException {
-        MediaPlayer mp = new MediaPlayer();
-        mp.setDataSource(path);
-        mp.prepare();
-        mp.start();
-        mp.setVolume(10, 10);
-    }
-}
-
-     */
-
-
-
-//public class NotificationReceiver extends BroadcastReceiver {
-    /*
-    public NotificationReceiver() {
-
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-// fire notification
-
-        // Gets an instance of the NotificationManager service
-        final NotificationManager mgr = (NotificationManager)     context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("")
-                        .setContentText("You have new horoscope");
-        // This pending intent will open after notification click
-        Intent resultIntent = new Intent(context, MainActivity.class);
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(context, 0, resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-
-        //mBuilder.setContentIntent(resultPendingIntent);
-        //Toast.makeText(this,"tapped on notification ",Toast.LENGTH_LONG).show();
-       // Toast.makeText(MainActivity.class,"tapped noti",Toast.LENGTH_LONG).show();
-        mBuilder.setAutoCancel(true);
-        // Sets an ID for the notification
-        int mNotificationId = 001;
-        // Builds the notification and issues it.
-        mgr.notify(mNotificationId, mBuilder.build());
-    }
-}
-
-     */
-
-/*
-public class NotificationReceiver extends IntentService {
-    private static final int NOTIF_ID = 1;
-
-    public AlarmReceiver() {
-        super("AlarmReceiver");
-    }
-
-    @Override
-    protected void onHandleIntent(Intent intent) {
-
-        Intent intnt = new Intent(getApplicationContext(), MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder b = new NotificationCompat.Builder(getApplicationContext());
-
-        b.setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_notifications)
-                .setTicker("Hearty365")
-                .setContentTitle("Are you safe?")
-                .setContentText("If not Tap Here")
-                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
-                .setContentIntent(contentIntent)
-                .setContentInfo("Info");
-
-
-        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, b.build());
-    }
-
-}
-
-
- */
-
-
-
-/*public class NotificationReceiver extends Service {
-
-    private final static String TAG = "ShowNotification";
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        Intent mainIntent = new Intent(this, MainActivity.class);
-
-        NotificationManager notificationManager
-                = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        Notification noti = new NotificationCompat.Builder(this)
-                .setAutoCancel(true)
-                .setContentIntent(PendingIntent.getActivity(this, 0, mainIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT))
-                .setContentTitle("HELLO " + System.currentTimeMillis())
-                .setContentText("PLEASE CHECK WE HAVE UPDATED NEWS")
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setSmallIcon(R.drawable.ic_notifications)
-                .setTicker("ticker message")
-                .setWhen(System.currentTimeMillis())
-                .build();
-
-        notificationManager.notify(0, noti);
-
-        Log.i(TAG, "Notification created");
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-}
-
- */

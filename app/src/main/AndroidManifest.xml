@@ -3,6 +3,7 @@
     package="com.example.saveme">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,6 +21,7 @@
 
         <activity android:name=".Recorder" />
         <activity android:name=".NotificationReceiver" />
+        <activity android:name=".settings" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
