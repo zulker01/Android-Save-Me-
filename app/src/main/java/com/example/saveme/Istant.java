@@ -70,142 +70,13 @@ public class Istant extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
 
-    /*Button record=findViewById(R.id.record);
-    Button stop=findViewById(R.id.stop);
-    Button play=findViewById(R.id.play);
-    Button playstop=findViewById(R.id.playstop);
-    String pathsave="";
-    MediaRecorder mediaRecorder;
-    MediaPlayer mediaPlayer;
-    final int REQUEST_PERMISSION_CODE=1000;
-    */
-
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_istant);
-        /*
-        if(checkPermissionFromDevice())
-        {
-            record.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    pathsave= Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+UUID.randomUUID().toString()
-                            +"_save_me.3gp";
-                    setupMediaRecorder();
-                    try{
-                        mediaRecorder.prepare();
-                        mediaRecorder.start();
 
-                    }
-                    catch(IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    play.setEnabled(false);
-                    playstop.setEnabled(false);
-
-                    Toast.makeText(Istant.this,"Recoeding...",Toast.LENGTH_SHORT).show();
-
-                }
-            });
-
-            stop.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mediaRecorder.stop();
-                    stop.setEnabled(false);
-                    play.setEnabled(true);
-                    record.setEnabled(true);
-                    playstop.setEnabled(false);
-                }
-            });
-
-            play.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    stop.setEnabled(false);
-                    play.setEnabled(false);
-                    record.setEnabled(false);
-                    playstop.setEnabled(true);
-                    mediaPlayer=new MediaPlayer();
-                    try{
-                        mediaPlayer.setDataSource(pathsave);
-                        mediaPlayer.prepare();
-
-                    }
-                    catch(IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-
-
-                }
-            });
-            playstop.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    stop.setEnabled(false);
-                    play.setEnabled(true);
-                    record.setEnabled(true);
-                    playstop.setEnabled(false);
-                    if(mediaPlayer!=null)
-                    {
-                        mediaPlayer.stop();
-                        mediaPlayer.release();
-                        setupMediaRecorder();
-
-                    }
-                }
-
-            });
-
-        }
-        else
-        {
-            requestPermissions();
-        }
-
-
-    }
-
-    private void setupMediaRecorder() {
-        mediaRecorder= new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-        mediaRecorder.setOutputFile(pathsave);
-    }
-
-    private void requestPermissions() {
-        ActivityCompat.requestPermissions(this,new String[]{
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.RECORD_AUDIO
-        },REQUEST_PERMISSION_CODE);
-
-         */
-
-
-
-
-    /*
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode)
-        {
-            case REQUEST_PERMISSION_CODE:
-            {
-                if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED)
-                    Toast.makeText(this,"Pemission Granted",Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(this,"Pemission Denied",Toast.LENGTH_SHORT).show();
-
-            }
-        }
-    }
-
-     */
 
         // initialize firebase authentication object
         firebaseAuth = FirebaseAuth.getInstance();
@@ -282,43 +153,56 @@ public class Istant extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        databaseReferenceLocations.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        firebaseAuth = FirebaseAuth.getInstance();
 
-                // currentUser = dataSnapshot.getValue(User.class);
-                userName = dataSnapshot.child("name").getValue().toString();
-                userEmail = dataSnapshot.child("email").getValue().toString();
-                userPhone = dataSnapshot.child("phone").getValue().toString();
+        /*
+        if the user is not logged in , prompt to log in
+        */
+        if (firebaseAuth.getCurrentUser() == null) {
+            finish();
+            startActivity(new Intent(Istant.this, user_login.class));
+            Toast.makeText(Istant.this, "Please login first", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            databaseReferenceLocations.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                //Retrieve contacts
-                long d = dataSnapshot.child("contacts").getChildrenCount();
-                String contactName = "";
-                String contactPhone = "";
-                currentContacts.clear();
+                    // currentUser = dataSnapshot.getValue(User.class);
+                    userName = dataSnapshot.child("name").getValue().toString();
+                    userEmail = dataSnapshot.child("email").getValue().toString();
+                    userPhone = dataSnapshot.child("phone").getValue().toString();
 
-                // getting contacts
-                for (Integer i = 0; i < d; i++) {
-                    contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
-                    contactPhone = dataSnapshot.child("contacts").child(i.toString()).child("second").getValue(String.class);
-                    currentContacts.add(new Pair<String, String>(contactName, contactPhone));
-                    break;
+                    //Retrieve contacts
+                    long d = dataSnapshot.child("contacts").getChildrenCount();
+                    String contactName = "";
+                    String contactPhone = "";
+                    currentContacts.clear();
+
+                    // getting contacts
+                    for (Integer i = 0; i < d; i++) {
+                        contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
+                        contactPhone = dataSnapshot.child("contacts").child(i.toString()).child("second").getValue(String.class);
+                        currentContacts.add(new Pair<String, String>(contactName, contactPhone));
+                        break;
+
+                    }
+                    // calling and messaging to emergency contact
+                    emergencyNum = contactPhone;
+                    call(emergencyNum);
+                    sendMessage(emergencyNum);
+                    Toast.makeText(Istant.this, "Contact " + d + " " + contactName + " " + contactPhone + " " + userEmail + " " + userName + " " + userPhone, Toast.LENGTH_SHORT).show();
 
                 }
-                // calling and messaging to emergency contact
-                emergencyNum = contactPhone;
-                call(emergencyNum);
-                sendMessage(emergencyNum);
-                Toast.makeText(Istant.this, "Contact " + d + " " + contactName + " " + contactPhone + " " + userEmail + " " + userName + " " + userPhone, Toast.LENGTH_SHORT).show();
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+                }
+            });
+        }
+    }
     }
 
 
-}
+

@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity
     // getting date time
     private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-    public static double latitude = 23.7287984;
-    public static double longitude = 90.3990832;
+    public static double latitude = 0;
+    public static double longitude = 0;
 
     // scheduling notification
 
@@ -754,71 +754,85 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        databaseReferenceLocations.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                // currentUser = dataSnapshot.getValue(User.class);
-                userName = dataSnapshot.child("name").getValue().toString();
-                userEmail = dataSnapshot.child("email").getValue().toString();
-                userPhone = dataSnapshot.child("phone").getValue().toString();
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        /*
+        if the user is not logged in , prompt to log in
+        */
+        if (firebaseAuth.getCurrentUser() == null) {
+            finish();
+            startActivity(new Intent(MainActivity.this, user_login.class));
+            Toast.makeText(MainActivity.this, "Please login first", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            databaseReferenceLocations.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    // currentUser = dataSnapshot.getValue(User.class);
+                    userName = dataSnapshot.child("name").getValue().toString();
+                    userEmail = dataSnapshot.child("email").getValue().toString();
+                    userPhone = dataSnapshot.child("phone").getValue().toString();
 
 
-                GenericTypeIndicator<ArrayList<Pair<String, String>>> t = new GenericTypeIndicator<ArrayList<Pair<String, String>>>() {
-                };
-                //currentContacts = dataSnapshot.child("contacts").getValue(t);
+                    GenericTypeIndicator<ArrayList<Pair<String, String>>> t = new GenericTypeIndicator<ArrayList<Pair<String, String>>>() {
+                    };
+                    //currentContacts = dataSnapshot.child("contacts").getValue(t);
 
-                //Retrieve contacts
-                long d = dataSnapshot.child("contacts").getChildrenCount();
-                String contactName = "";
-                String contactPhone = "";
-                currentContacts.clear();
+                    //Retrieve contacts
+                    long d = dataSnapshot.child("contacts").getChildrenCount();
+                    String contactName = "";
+                    String contactPhone = "";
+                    currentContacts.clear();
 
 
-                for (Integer i = 0; i < d; i++) {
-                    contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
-                    contactPhone = dataSnapshot.child("contacts").child(i.toString()).child("second").getValue(String.class);
-                    currentContacts.add(new Pair<String, String>(contactName, contactPhone));
-                    break;
+                    for (Integer i = 0; i < d; i++) {
+                        contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
+                        contactPhone = dataSnapshot.child("contacts").child(i.toString()).child("second").getValue(String.class);
+                        currentContacts.add(new Pair<String, String>(contactName, contactPhone));
+                        break;
 
+
+                    }
+                    emergencyNum = contactPhone;
+
+                    //Toast.makeText( MainActivity.this,"Contact emer"+emergencyNum+" "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_SHORT).show();
+                    // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
+
+                    // retrieve locations
+                    long locationCount = dataSnapshot.child("location").getChildrenCount();
+                    String locationName = "";
+                    String latitude = "";
+                    String longitude = "";
+
+                    location.clear();
+                    if (buffer.length() > 0) {
+                        buffer.delete(0, buffer.length() - 1);
+                    }
+                    for (Integer i = 0; i < locationCount; i++) {
+                        locationName = dataSnapshot.child("location").child(i.toString()).child("first").getValue(String.class);
+                        latitude = dataSnapshot.child("location").child(i.toString()).child("second").child("first").getValue(String.class);
+                        longitude = dataSnapshot.child("location").child(i.toString()).child("second").child("second").getValue(String.class);
+                        location.add(new Pair<String, Pair<String, String>>(locationName, (new Pair<String, String>(latitude, longitude))));
+                        buffer.append("NAME : " + locationName + "\n");
+                        buffer.append("Latitude : " + latitude + "\n");
+                        buffer.append("Longitude : " + longitude + "\n\n");
+                    }
+
+
+                    retrieveDone = 1;
+                    //  Toast.makeText( Istant.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
 
                 }
-                emergencyNum = contactPhone;
 
-                //Toast.makeText( MainActivity.this,"Contact emer"+emergencyNum+" "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_SHORT).show();
-                // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                // retrieve locations
-                long locationCount = dataSnapshot.child("location").getChildrenCount();
-                String locationName = "";
-                String latitude = "";
-                String longitude = "";
-
-                location.clear();
-                if (buffer.length() > 0) {
-                    buffer.delete(0, buffer.length() - 1);
                 }
-                for (Integer i = 0; i < locationCount; i++) {
-                    locationName = dataSnapshot.child("location").child(i.toString()).child("first").getValue(String.class);
-                    latitude = dataSnapshot.child("location").child(i.toString()).child("second").child("first").getValue(String.class);
-                    longitude = dataSnapshot.child("location").child(i.toString()).child("second").child("second").getValue(String.class);
-                    location.add(new Pair<String, Pair<String, String>>(locationName, (new Pair<String, String>(latitude, longitude))));
-                    buffer.append("NAME : " + locationName + "\n");
-                    buffer.append("Latitude : " + latitude + "\n");
-                    buffer.append("Longitude : " + longitude + "\n\n");
-                }
+            });
 
-
-                retrieveDone = 1;
-                //  Toast.makeText( Istant.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        }
     }
     //firebase
 }
