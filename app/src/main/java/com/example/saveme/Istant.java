@@ -54,26 +54,19 @@ public class Istant extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     FirebaseUser appUser;
     // define firebase object to save information
-    private DatabaseReference databaseReferenceofContacts;
-    private  DatabaseReference databaseReferenceLocations;
-    private  DatabaseReference databaseReferenceofContactsShow;
-   // private ArrayList<Pair<String,String>> contacts = new ArrayList <Pair <String,String> > ();
-    private ArrayList<Pair<String,String>> currentContacts = new ArrayList <Pair <String,String> > ();
-    private ArrayList<Pair<String,Pair<String,String> > > location = new ArrayList<Pair<String,Pair<String,String> > >();
+
+    private DatabaseReference databaseReferenceLocations;
+    // contacts array
+    private ArrayList<Pair<String, String>> currentContacts = new ArrayList<Pair<String, String>>();
     private StringBuffer buffer;
-    String userName ;
-    String userEmail ;
-    String userPhone ;
-    String emergencyNum ="";
-    private  Integer retrieveDone = 0;
+    // user profile of current user
+    String userName;
+    String userEmail;
+    String userPhone;
+    String emergencyNum = "";
+
     // calling
     private static final int REQUEST_CALL = 1;
-
-    //messaging
-    //scheduling
-
-    public long initialTimetoCheckLocation = 1;
-    public long delayTimetoCheckLocation = 3;
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
 
@@ -86,10 +79,6 @@ public class Istant extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     final int REQUEST_PERMISSION_CODE=1000;
     */
-
-
-
-
 
 
     @Override
@@ -157,6 +146,7 @@ public class Istant extends AppCompatActivity {
             playstop.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     stop.setEnabled(false);
                     play.setEnabled(true);
                     record.setEnabled(true);
@@ -197,7 +187,7 @@ public class Istant extends AppCompatActivity {
 
          */
 
-    }
+
 
 
     /*
@@ -223,80 +213,26 @@ public class Istant extends AppCompatActivity {
         /*
         if the user is not logged in , prompt to log in
         */
-        if(firebaseAuth.getCurrentUser() == null){
+        if (firebaseAuth.getCurrentUser() == null) {
             finish();
-            startActivity(new Intent(Istant.this,user_login.class));
+            startActivity(new Intent(Istant.this, user_login.class));
             Toast.makeText(Istant.this, "Please login first", Toast.LENGTH_SHORT).show();
         }
+
+        // getting current user
         appUser = firebaseAuth.getCurrentUser();
-        databaseReferenceLocations = FirebaseDatabase.getInstance().getReference("Users/"+appUser.getUid());
+        databaseReferenceLocations = FirebaseDatabase.getInstance().getReference("Users/" + appUser.getUid());
 
         buffer = new StringBuffer();
 
-
-        final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-
-        //retrieveData();
-        /*while(true) {
-            Log.d("hayre","ki kormu ami ");
-            if (retrieveDone == 0) {
-
-                /*
-                scheduler.scheduleWithFixedDelay(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if(retrieveDone==1) {
-                            scheduler.shutdown();
-                        }
-                    }
-                }, initialTimetoCheckLocation, delayTimetoCheckLocation, SECONDS);
-
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-             else {
-             */
-
-        /*
-        while(retrieveDone == 0) {
-            Log.d("hayre","ki kormu ami 2");
-        }
-        */
-/*
-        while(retrieveDone!=1) {
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            String topContact = "hay";
-            Log.d("hay ", topContact + " " + retrieveDone);
-            //topContact = currentContacts.get(0).second;
-            Log.d("hay ", topContact);
-        }*/
-        String topContact = "hay";
-        Log.d("hay ", topContact + " " + retrieveDone);
-        //sendMessage("01234");
-        //call("8765");
-
-
-
-
-
-            }
+    }
 
 
     public void sendMessage(String phoneNumber) {
 
 
         String smsMessage = "I am in danger, HELP ! \n\n I am at " +
-                "\n Latitude : " + latitude + "\nLongitude :  " + longitude + " \nLink : www.google.com/maps/place/" + latitude + "," + longitude + "\n" ;
+                "\n Latitude : " + latitude + "\nLongitude :  " + longitude + " \nLink : www.google.com/maps/place/" + latitude + "," + longitude + "\n";
 
         if (checkMessagePermission(Manifest.permission.SEND_SMS)) {
             SmsManager smsManager = SmsManager.getDefault();
@@ -305,31 +241,27 @@ public class Istant extends AppCompatActivity {
         } else {
             ActivityCompat.requestPermissions(Istant.this,
                     new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
-            Toast.makeText(Istant.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Istant.this, "Permission Needed to send message", Toast.LENGTH_SHORT).show();
         }
     }
+
     public void call(String number) {
-        //DatabaseHelper databaseHelper = new DatabaseHelper(null);
-        //String mara = DatabaseHelper.getInstance().getNumber("1");
-        //System.out.println(mara);
 
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:"+number));
+        callIntent.setData(Uri.parse("tel:" + number));
 
-        if( ActivityCompat.checkSelfPermission(Istant.this, Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED)
-        {
-            Toast menuToast = Toast.makeText(Istant.this,R.string.phonePermission, Toast.LENGTH_LONG);
+        if (ActivityCompat.checkSelfPermission(Istant.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            Toast menuToast = Toast.makeText(Istant.this, R.string.phonePermission, Toast.LENGTH_LONG);
             menuToast.show();
             ActivityCompat.requestPermissions(Istant.this,
                     new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
-            // return ;
-        }
-        else {
+
+        } else {
             startActivity(callIntent);
         }
     }
 
-    public boolean checkMessagePermission(String permission){
+    public boolean checkMessagePermission(String permission) {
         int check = ContextCompat.checkSelfPermission(Istant.this, permission);
         return (check == PackageManager.PERMISSION_GRANTED);
     }
@@ -346,67 +278,6 @@ public class Istant extends AppCompatActivity {
 
      */
 
-/*public void retrieveData()
-    {
-        databaseReferenceLocations.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-
-                // currentUser = dataSnapshot.getValue(User.class);
-                userName = dataSnapshot.child("name").getValue().toString();
-                userEmail = dataSnapshot.child("email").getValue().toString();
-                userPhone = dataSnapshot.child("phone").getValue().toString();
-
-                   //Retrieve contacts
-                long d = dataSnapshot.child("contacts").getChildrenCount();
-                String contactName="";
-                String contactPhone="";
-                currentContacts.clear();
-
-
-                for(Integer i=0;i<d;i++)
-                {
-                    contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
-                    contactPhone = dataSnapshot.child("contacts").child(i.toString()).child("second").getValue(String.class);
-                    currentContacts.add(new Pair <String,String> (contactName, contactPhone));
-
-                }
-                Toast.makeText( Istant.this,"Contact "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_SHORT).show();
-                // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
-
-                // retrieve locations
-                long locationCount = dataSnapshot.child("location").getChildrenCount();
-                String locationName="";
-                String latitude="";
-                String longitude="";
-
-                location.clear();
-                if(buffer.length()>0) {
-                    buffer.delete(0, buffer.length() - 1);
-                }
-                for(Integer i=0;i<locationCount;i++)
-                {
-                    locationName = dataSnapshot.child("location").child(i.toString()).child("first").getValue(String.class);
-                    latitude = dataSnapshot.child("location").child(i.toString()).child("second").child("first").getValue(String.class);
-                    longitude = dataSnapshot.child("location").child(i.toString()).child("second").child("second").getValue(String.class);
-                    location.add(new Pair<String, Pair<String, String>>(locationName,(new Pair<String, String>(latitude,longitude))));
-                    buffer.append("NAME : " + locationName + "\n");
-                    buffer.append("Latitude : " + latitude + "\n");
-                    buffer.append("Longitude : " + longitude + "\n\n");
-                }
-                retrieveDone = 1;
-                Toast.makeText( Istant.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-*/
 
     @Override
     protected void onStart() {
@@ -420,55 +291,25 @@ public class Istant extends AppCompatActivity {
                 userEmail = dataSnapshot.child("email").getValue().toString();
                 userPhone = dataSnapshot.child("phone").getValue().toString();
 
-
-                GenericTypeIndicator<ArrayList<Pair<String,String>>> t = new GenericTypeIndicator<ArrayList<Pair<String,String>>>() {};
-                //currentContacts = dataSnapshot.child("contacts").getValue(t);
-
                 //Retrieve contacts
                 long d = dataSnapshot.child("contacts").getChildrenCount();
-                String contactName="";
-                String contactPhone="";
+                String contactName = "";
+                String contactPhone = "";
                 currentContacts.clear();
 
-
-                for(Integer i=0;i<d;i++)
-                {
+                // getting contacts
+                for (Integer i = 0; i < d; i++) {
                     contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
                     contactPhone = dataSnapshot.child("contacts").child(i.toString()).child("second").getValue(String.class);
-                    currentContacts.add(new Pair <String,String> (contactName, contactPhone));
+                    currentContacts.add(new Pair<String, String>(contactName, contactPhone));
                     break;
 
                 }
+                // calling and messaging to emergency contact
                 emergencyNum = contactPhone;
                 call(emergencyNum);
                 sendMessage(emergencyNum);
-                Toast.makeText( Istant.this,"Contact "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_SHORT).show();
-                // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
-                /*
-                // retrieve locations
-                long locationCount = dataSnapshot.child("location").getChildrenCount();
-                String locationName="";
-                String latitude="";
-                String longitude="";
-
-                location.clear();
-                if(buffer.length()>0) {
-                    buffer.delete(0, buffer.length() - 1);
-                }
-                for(Integer i=0;i<locationCount;i++)
-                {
-                    locationName = dataSnapshot.child("location").child(i.toString()).child("first").getValue(String.class);
-                    latitude = dataSnapshot.child("location").child(i.toString()).child("second").child("first").getValue(String.class);
-                    longitude = dataSnapshot.child("location").child(i.toString()).child("second").child("second").getValue(String.class);
-                    location.add(new Pair<String, Pair<String, String>>(locationName,(new Pair<String, String>(latitude,longitude))));
-                    buffer.append("NAME : " + locationName + "\n");
-                    buffer.append("Latitude : " + latitude + "\n");
-                    buffer.append("Longitude : " + longitude + "\n\n");
-                }
-
-                 */
-                retrieveDone = 1;
-              //  Toast.makeText( Istant.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
+                Toast.makeText(Istant.this, "Contact " + d + " " + contactName + " " + contactPhone + " " + userEmail + " " + userName + " " + userPhone, Toast.LENGTH_SHORT).show();
 
             }
 
@@ -480,4 +321,4 @@ public class Istant extends AppCompatActivity {
     }
 
 
-    }
+}

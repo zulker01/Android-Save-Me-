@@ -62,25 +62,16 @@ public class ShowSavedLocation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_savedlocation);
-        //myDb = new SavedLocation(this);
-       // mainActivity = new MainActivity();
+
         edit_Name =(EditText) findViewById(R.id.address);
         edit_Lattitude = (EditText) findViewById(R.id.lattitude);
         edit_Longitude = (EditText) findViewById(R.id.longitude);
         addData = (Button) findViewById(R.id.AddData);
         viewAll = (Button) findViewById(R.id.ViewData);
-        updateData = (Button) findViewById(R.id.updateData);
         deleteData = (Button) findViewById(R.id.deleteData);
-        edit_Longitude.setText(this.getIntent().getExtras().getString("key2"));
-        edit_Lattitude.setText(this.getIntent().getExtras().getString("key1"));
-        /*AddData();
-        viewAll();
-        UpdateData();
-        DeleteData();
-       // mainActivity.getLocation();
-        //double lat = (double) mainActivity.lattitude;
-        //edit_Address.setText("");
-        */
+        // showing current location
+        edit_Longitude.setText( String.valueOf(MainActivity.latitude));
+        edit_Lattitude.setText(String.valueOf(MainActivity.longitude));
 
         // initialize firebase authentication object
         firebaseAuth = FirebaseAuth.getInstance();
@@ -97,6 +88,8 @@ public class ShowSavedLocation extends AppCompatActivity {
         databaseReferenceLocations = FirebaseDatabase.getInstance().getReference("Users/"+appUser.getUid());
 
         buffer = new StringBuffer();
+
+        // saving location
         addData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +111,9 @@ public class ShowSavedLocation extends AppCompatActivity {
 
 
         });
+
+        // view saved location
+
         viewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,20 +151,6 @@ public class ShowSavedLocation extends AppCompatActivity {
                 userName = dataSnapshot.child("name").getValue().toString();
                 userEmail = dataSnapshot.child("email").getValue().toString();
                 userPhone = dataSnapshot.child("phone").getValue().toString();
-
-                /*
-                GenericTypeIndicator<ArrayList<Item>> t = new GenericTypeIndicator<ArrayList<Item>>() {};
-                ArrayList<Item> yourStringArray = snapshot.getValue(t);
-                Toast.makeText(getContext(),yourStringArray.get(0).getName(),Toast.LENGTH_LONG).show();
-
-                 */
-                GenericTypeIndicator<ArrayList<Pair<String,String>>> t = new GenericTypeIndicator<ArrayList<Pair<String,String>>>() {};
-                //currentContacts = dataSnapshot.child("contacts").getValue(t);
-/*
-                String userName = currentUser.name;
-                String userEmail = currentUser.email;
-                String userPhone = currentUser.phone;
-  */
                 //Retrieve contacts
                 long d = dataSnapshot.child("contacts").getChildrenCount();
                 String contactName="";
@@ -183,8 +165,6 @@ public class ShowSavedLocation extends AppCompatActivity {
                     currentContacts.add(new Pair <String,String> (contactName, contactPhone));
 
                 }
-                Toast.makeText( ShowSavedLocation.this,"Contact "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
-                // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
 
                 // retrieve locations
                 long locationCount = dataSnapshot.child("location").getChildrenCount();
@@ -207,7 +187,6 @@ public class ShowSavedLocation extends AppCompatActivity {
                     buffer.append("Longitude : " + longitude + "\n\n");
                 }
                 retrieveDone =1;
-                Toast.makeText( ShowSavedLocation.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
 
             }
 
@@ -218,13 +197,13 @@ public class ShowSavedLocation extends AppCompatActivity {
         });
     }
 
+    // saving location
+
     private void saveLocations(){
         String name = edit_Name.getText().toString();
         String latitude = edit_Lattitude.getText().toString();
         String longitude = edit_Longitude.getText().toString();
-        edit_Lattitude.setText("");
-        edit_Longitude.setText("");
-        edit_Name.setText("");
+
         location.add(new Pair<String, Pair<String, String>>(name,(new Pair<String, String>(latitude,longitude))));
         User updateUser = new User(userName,userEmail,userPhone);
         updateUser.setContacts(currentContacts);
@@ -245,86 +224,6 @@ public class ShowSavedLocation extends AppCompatActivity {
         });
         Toast.makeText(ShowSavedLocation.this," Location saved ",Toast.LENGTH_LONG).show();
     }
-
-/*
-    public void DeleteData(){
-        deleteData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Integer deleteRows = myDb.deleteData(edit_Address.getText().toString());
-                if(deleteRows >0)
-                    Toast.makeText(ShowSavedLocation.this, " Data deleted",Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(ShowSavedLocation.this, " Data is not deleted",Toast.LENGTH_SHORT).show();
-
-                edit_Address.setText("");
-                edit_Longitude.setText("");
-                edit_Lattitude.setText("");
-
-            }
-        });
-    }
-
-    public void UpdateData(){
-        updateData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("fuck");
-
-
-
-                boolean isUpdate = myDb.updateData(edit_Address.getText().toString(), edit_Lattitude.getText().toString(), edit_Longitude.getText().toString());
-
-                if(isUpdate == true){
-                    Toast.makeText(ShowSavedLocation.this, " Data Updated",Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(ShowSavedLocation.this, " Data is not Updated",Toast.LENGTH_SHORT).show();
-                }
-                //MainActivity mainActivity = new MainActivity();
-
-               // EditText editText = (EditText) mainActivity.longitude;
-
-            }
-        });
-    }
-
-    public void AddData(){
-        addData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isInserted = myDb.insertData((edit_Address.getText().toString()), edit_Lattitude.getText().toString(),edit_Longitude.getText().toString());
-                if(isInserted == true)
-                    Toast.makeText(ShowSavedLocation.this, " Data Inserted",Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(ShowSavedLocation.this, " Data is not Inserted",Toast.LENGTH_SHORT).show();
-
-
-            }
-        });
-    }
-
-    public void viewAll(){
-        viewAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Cursor res = myDb.getAllData();
-                if(res.getCount() == 0) {
-                    showMessage("Error","Nothing found");
-                    return;
-                }
-
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ADDRESS : " + res.getString(0)+"\n");
-                    buffer.append("LATTITUDE : " + res.getString(1)+"\n");
-                    buffer.append("LONGITUDE : " + res.getString(2)+"\n\n");
-
-                }showMessage("Data",buffer.toString());
-            }
-        });
-    }
-*/
     public void showMessage(String title, String Message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);

@@ -58,7 +58,6 @@ public class ShowContactsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_contacts);
-        //myDb = new DatabaseHelper(this);
 
         edit_Name =(EditText) findViewById(R.id.editText2);
         edit_Number = (EditText) findViewById(R.id.editText3);
@@ -66,8 +65,6 @@ public class ShowContactsActivity extends AppCompatActivity {
         addData = (Button) findViewById(R.id.btnAddData);
         viewAll = (Button) findViewById(R.id.btnViewData);
 
-       // addData();
-       // viewAll();
         // initialize firebase authentication object
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -84,16 +81,9 @@ public class ShowContactsActivity extends AppCompatActivity {
         databaseReferenceofContactsShow = FirebaseDatabase.getInstance().getReference("Users").child(appUser.getUid());
 
         buffer = new StringBuffer();
-        updateData = (Button) findViewById(R.id.btnupdateData);
         deleteData = (Button) findViewById(R.id.btndeleteData);
-       /* AddData();
-        viewAll();
-        UpdateData();
-        DeleteData();
 
-
-        */
-
+        // adding contacts
        addData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +100,8 @@ public class ShowContactsActivity extends AppCompatActivity {
 
 
         });
+
+       // showing contacts
        viewAll.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
@@ -142,19 +134,6 @@ public class ShowContactsActivity extends AppCompatActivity {
                 userEmail = dataSnapshot.child("email").getValue().toString();
                 userPhone = dataSnapshot.child("phone").getValue().toString();
 
-                /*
-                GenericTypeIndicator<ArrayList<Item>> t = new GenericTypeIndicator<ArrayList<Item>>() {};
-                ArrayList<Item> yourStringArray = snapshot.getValue(t);
-                Toast.makeText(getContext(),yourStringArray.get(0).getName(),Toast.LENGTH_LONG).show();
-
-                 */
-                GenericTypeIndicator<ArrayList<Pair<String,String>>> t = new GenericTypeIndicator<ArrayList<Pair<String,String>>>() {};
-                //currentContacts = dataSnapshot.child("contacts").getValue(t);
-/*
-                String userName = currentUser.name;
-                String userEmail = currentUser.email;
-                String userPhone = currentUser.phone;
-  */
                 //Retrieve contacts
                 long d = dataSnapshot.child("contacts").getChildrenCount();
                 String contactName="";
@@ -171,10 +150,6 @@ public class ShowContactsActivity extends AppCompatActivity {
                     buffer.append("NAME : " + contactName + "\n");
                     buffer.append("NUMBER : " + contactPhone + "\n\n");
                 }
-                Toast.makeText( ShowContactsActivity.this,"Contact "+d+" "+contactName+" "+contactPhone+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
-               // Toast.makeText( ShowContactsActivity.this,"Contact name "+currentContacts.get(0).toString(), Toast.LENGTH_LONG).show();
-
-                // retrieve locations
                 long locationCount = dataSnapshot.child("location").getChildrenCount();
                 String locationName="";
                 String latitude="";
@@ -191,7 +166,6 @@ public class ShowContactsActivity extends AppCompatActivity {
 
                 }
                 retrieveDone =1;
-                Toast.makeText( ShowContactsActivity.this,"Contact "+locationCount+" "+locationName+" "+latitude+" "+userEmail+" "+userName+" "+userPhone, Toast.LENGTH_LONG).show();
 
             }
 
@@ -205,13 +179,14 @@ public class ShowContactsActivity extends AppCompatActivity {
     private void saveContacts(){
         String name = edit_Name.getText().toString();
         String phone = edit_Number.getText().toString();
-        edit_getId.setText("");
-        edit_Name.setText("");
-        edit_Number.setText("");
+
+        // adding contacts
         currentContacts.add(new Pair <String,String> (name, phone));
         User updateUser = new User(userName,userEmail,userPhone);
         updateUser.setContacts(currentContacts);
         updateUser.setLocation(location);
+
+        // uploading contacts to firebase
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(appUser.getUid())
                 .setValue(updateUser).addOnCompleteListener(new OnCompleteListener<Void>() {
