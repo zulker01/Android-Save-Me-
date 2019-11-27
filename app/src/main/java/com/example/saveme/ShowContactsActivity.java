@@ -61,10 +61,9 @@ public class ShowContactsActivity extends AppCompatActivity {
 
         edit_Name =(EditText) findViewById(R.id.editText2);
         edit_Number = (EditText) findViewById(R.id.editText3);
-        edit_getId = (EditText) findViewById(R.id.editText);
         addData = (Button) findViewById(R.id.btnAddData);
         viewAll = (Button) findViewById(R.id.btnViewData);
-
+        deleteData = (Button) findViewById(R.id.btndeleteData);
         // initialize firebase authentication object
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -120,6 +119,25 @@ public class ShowContactsActivity extends AppCompatActivity {
 
 
        });
+
+
+        // deleting contacts
+        deleteData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(retrieveDone==1) {
+                    deleteContacts();
+                }
+                else
+                {
+                    Toast.makeText( ShowContactsActivity.this,"Data Retrieving , Please wait ", Toast.LENGTH_LONG).show();
+                }
+            }
+
+
+
+        });
     }
 
     @Override
@@ -182,6 +200,7 @@ public class ShowContactsActivity extends AppCompatActivity {
 
         // adding contacts
         currentContacts.add(new Pair <String,String> (name, phone));
+
         User updateUser = new User(userName,userEmail,userPhone);
         updateUser.setContacts(currentContacts);
         updateUser.setLocation(location);
@@ -205,6 +224,52 @@ public class ShowContactsActivity extends AppCompatActivity {
         //Toast.makeText(ShowContactsActivity.this," ",Toast.LENGTH_LONG).show();
     }
 
+    private void deleteContacts(){
+        String name = edit_Name.getText().toString();
+        String phone = edit_Number.getText().toString();
+        Integer deleteCounter = 0;
+        // deleting contacts
+        for(Integer i = 0;i<currentContacts.size();i++)
+        {
+            if(currentContacts.get(i).second.equals(phone))
+            {
+                Toast.makeText(ShowContactsActivity.this, "Contact  found at "+i+"name "+currentContacts.get(i).first, Toast.LENGTH_LONG).show();
+
+                currentContacts.remove(i);
+
+                Toast.makeText(ShowContactsActivity.this, "Contact  found at "+i+"name "+currentContacts.get(i).first+"phone :"+currentContacts.get(i).second, Toast.LENGTH_LONG).show();
+
+                deleteCounter = 1;
+                break;
+            }
+        }
+        if(deleteCounter == 0)
+        {
+            Toast.makeText(ShowContactsActivity.this, "Contact not found ", Toast.LENGTH_LONG).show();
+            return;
+        }
+        User updateUser = new User(userName,userEmail,userPhone);
+        updateUser.setContacts(currentContacts);
+        updateUser.setLocation(location);
+
+        // uploading contacts to firebase
+        FirebaseDatabase.getInstance().getReference("Users")
+                .child(appUser.getUid())
+                .setValue(updateUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                // progressBar.setVisibility(View.GONE);
+                if (task.isSuccessful()) {
+                    Toast.makeText(ShowContactsActivity.this, "Contact deleted ", Toast.LENGTH_LONG).show();
+                } else {
+                    //display a failure message
+                    Toast.makeText( ShowContactsActivity.this,"Contact deleted Error", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        //Toast.makeText(ShowContactsActivity.this," ",Toast.LENGTH_LONG).show();
+    }
 
 
     public void showMessage(String title, String Message){
