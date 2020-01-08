@@ -128,10 +128,6 @@ public class Istant extends AppCompatActivity {
         buffer = new StringBuffer();
 
         // record audio
-        buttonStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
                 if(checkPermission()) {
 
                     AudioSavePathInDevice =
@@ -159,9 +155,6 @@ public class Istant extends AppCompatActivity {
                 } else {
                     requestPermission();
                 }
-
-            }
-        });
 
         buttonStop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,6 +211,7 @@ public class Istant extends AppCompatActivity {
 
     }
 
+    // functions for record audio
     public void MediaRecorderReady(){
         mediaRecorder=new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -274,6 +268,7 @@ public class Istant extends AppCompatActivity {
                 result1 == PackageManager.PERMISSION_GRANTED;
     }
 
+    // send message
     public void sendMessage(String phoneNumber) {
 
 
