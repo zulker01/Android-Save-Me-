@@ -19,32 +19,32 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/record"
+        android:id="@+id/buttonStart"
         android:text="Record"
         ></Button>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/stop"
+        android:id="@+id/buttonStop"
         android:text="Stop"
-        android:layout_toEndOf="@+id/record"
+        android:layout_toEndOf="@+id/buttonStart"
         ></Button>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/play"
+        android:id="@+id/buttonPlayLastRecordAudio"
         android:text="Play"
-        android:layout_below="@+id/record"
+        android:layout_below="@+id/buttonStart"
         ></Button>
 
     <Button
-        android:id="@+id/playstop"
+        android:id="@+id/buttonStopPlayingRecording"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/stop"
-        android:layout_toEndOf="@+id/play"
+        android:layout_below="@id/buttonStop"
+        android:layout_toEndOf="@+id/buttonPlayLastRecordAudio"
         android:text="Stop"></Button>
 
 
