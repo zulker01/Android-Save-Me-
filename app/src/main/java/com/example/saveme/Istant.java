@@ -278,7 +278,7 @@ public class Istant extends AppCompatActivity {
         if (checkMessagePermission(Manifest.permission.SEND_SMS)) {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, smsMessage, null, null);
-            Toast.makeText(Istant.this, "Message Sent!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Istant.this, "Message Sent to "+phoneNumber+" !", Toast.LENGTH_SHORT).show();
         } else {
             ActivityCompat.requestPermissions(Istant.this,
                     new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
@@ -354,14 +354,18 @@ public class Istant extends AppCompatActivity {
                         contactName = dataSnapshot.child("contacts").child(i.toString()).child("first").getValue(String.class);
                         contactPhone = dataSnapshot.child("contacts").child(i.toString()).child("second").getValue(String.class);
                         currentContacts.add(new Pair<String, String>(contactName, contactPhone));
-                        break;
+                        //break;
 
                     }
                     // calling and messaging to emergency contact
                     emergencyNum = contactPhone;
+                    emergencyNum = currentContacts.get(0).second.toString();
                     call(emergencyNum);
-                    sendMessage(emergencyNum);
-                    Toast.makeText(Istant.this, "Contact " + d + " " + contactName + " " + contactPhone + " " + userEmail + " " + userName + " " + userPhone, Toast.LENGTH_SHORT).show();
+                    for(Integer i = 0;i<currentContacts.size();i++) {
+                        emergencyNum = currentContacts.get(i).second;
+                        sendMessage(emergencyNum);
+                    }
+                    //Toast.makeText(Istant.this, "Contact " + d + " " + contactName + " " + contactPhone + " "+ " emergency first num  "+emergencyNum + userEmail + " " + userName + " " + userPhone, Toast.LENGTH_SHORT).show();
 
                 }
 

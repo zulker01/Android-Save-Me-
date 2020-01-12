@@ -233,11 +233,11 @@ public class ShowContactsActivity extends AppCompatActivity {
         {
             if(currentContacts.get(i).second.equals(phone))
             {
-                Toast.makeText(ShowContactsActivity.this, "Contact  found at "+i+"name "+currentContacts.get(i).first, Toast.LENGTH_LONG).show();
+                Toast.makeText(ShowContactsActivity.this, "Contact  found at "+i+" name "+currentContacts.get(i).first, Toast.LENGTH_LONG).show();
 
                 currentContacts.remove(i);
 
-                Toast.makeText(ShowContactsActivity.this, "Contact  found at "+i+"name "+currentContacts.get(i).first+"phone :"+currentContacts.get(i).second, Toast.LENGTH_LONG).show();
+                //Toast.makeText(ShowContactsActivity.this, "Contact  found at "+i+"name "+currentContacts.get(i).first+"phone :"+currentContacts.get(i).second, Toast.LENGTH_LONG).show();
 
                 deleteCounter = 1;
                 break;
@@ -248,6 +248,7 @@ public class ShowContactsActivity extends AppCompatActivity {
             Toast.makeText(ShowContactsActivity.this, "Contact not found ", Toast.LENGTH_LONG).show();
             return;
         }
+        currentContacts.clear();
         User updateUser = new User(userName,userEmail,userPhone);
         updateUser.setContacts(currentContacts);
         updateUser.setLocation(location);
