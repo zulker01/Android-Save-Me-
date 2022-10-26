@@ -1,5 +1,8 @@
-# Android-Save-Me-
-This app is made to help people in danger
+# Save Me!
+## Android Application 
+
+Imagine you were caught by an accident, even worse, you are being kidnapped. What do you need the most ? Yes contacting your friend or family to let them know about your situation along with your location, so that they can come and help . 
+Our app is designed to help you to the utmost in these sitations. 
 
 Features :
 
@@ -12,3 +15,7 @@ Features :
       another is sent after somewhile. It will continue and after
       several hours automatically there will be a distress call,
       location sharing as previous
+  5. If the phone is lost, current location can be known automatically through the message
+  
+  [Click here for more details](https://www.youtube.com/watch?v=UhdmN1t9RCg&t=71s)
+
